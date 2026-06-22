@@ -8,7 +8,7 @@ export async function resolveHome(): Promise<string> {
   if (!session?.user?.id) return "/login";
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },
-    include: { employees: { include: { company: true }, orderBy: { createdAt: "asc" } } }
+    include: { employees: { include: { company: true } } }
   });
   if (!user) return "/login";
   if (user.isPlatformAdmin) return "/admin";
