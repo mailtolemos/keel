@@ -5,6 +5,10 @@ import { Providers } from "@/components/Providers";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 
+// This app is fully dynamic (auth/session + per-request DB). Disable static
+// prerendering so build never evaluates next-auth/env at build time.
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Keel — The backbone of high-performing teams",
   description:
