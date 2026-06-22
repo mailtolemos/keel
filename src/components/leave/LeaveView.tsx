@@ -1,0 +1,143 @@
+"use client";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { PageHeader } from "@/components/PageHeader";
+import { Card, Stat, Avatar, Badge, Button, Input, Label, Select, Textarea, Progress } from "@/components/ui";
+import { Dialog } from "@/components/Dialog";
+import { Icon } from "@/components/icons";
+import { requestLeave, decideLeave, cancelLeave } from "@/app/actions/leave";
+import { LEAVE_TYPE_LABEL } from "@/lib/enums";
+
+const fmt = (d: string) => new Date(d).toLocaleDateString("en-US", { month: "short", day: "numeric" });
+const statusTone = (s: string): "good" | "warn" | "bad" | "neutral" | "accent" | "navy" | "neutral" => (s === "APPROVED" ? "good" : s === "PENDING" ? "warn" : s === "REJECTED" ? "bad" : "neutral");
+
+type Req = { id: string; type: string; startDate: string; endDate: string; days: number; reason: string | null; status: string; employeeName: string; employeeImage: string | null; mine: boolean };
+
+export function LeaveView({ balance, allowance, myRequests, pending, holidays, upcoming, canApprove }: {
+  balance: number; allowance: number;
+  myRequests: Req[]; pending: Req[];
+  holidays: { id: string; name: string; date: string; calendar: string }[];
+  upcoming: { id: string; name: string; image: string | null; type: string; startDate: string; endDate: string }[];
+  canApprove: boolean;
+}) {
+  const used = allowance - balance;
+  return (
+    <div>
+      <PageHeader title="Leave" subtitle="Request time off, track balances, and see who's away."
+        action={<Dialog title="Request time off" trigger={<><Icon.plus size={16} /> Request time off</>}>{(close) => <RequestForm close={close} />}</Dialog>} />
+
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
+        <Stat label="Vacation remaining" value={`${balance}d`} sub={`of ${allowance}d this year`} />
+        <Stat label="Used" value={`${used}d`} />
+        <Stat label="Pending" value={myRequests.filter((r) => r.status === "PENDING").length} sub="your requests" />
+        <Stat label="Out this month" value={upcoming.length} sub="across the company" />
+      </div>
+
+      <div className="grid lg:grid-cols-3 gap-5">
+        <div className="lg:col-span-2 space-y-5">
+          {canApprove && (
+            <Card className="p-5">
+              <h2 className="text-sm font-semibold text-navy mb-3">Pending approvals</h2>
+              {pending.length === 0 ? <p className="text-[13px] text-graphite-500">Nothing awaiting your approval.</p> : (
+                <div className="divide-y divide-graphite-100 -my-1">
+                  {pending.map((r) => <ApprovalRow key={r.id} r={r} />)}
+                </div>
+              )}
+            </Card>
+          )}
+          <Card className="p-5">
+            <h2 className="text-sm font-semibold text-navy mb-3">Your requests</h2>
+            {myRequests.length === 0 ? <p className="text-[13px] text-graphite-500">No requests yet.</p> : (
+              <div className="divide-y divide-graphite-100 -my-1">
+                {myRequests.map((r) => (
+                  <div key={r.id} className="flex items-center gap-3 py-2.5">
+                    <div className="h-8 w-8 rounded-lg bg-navy-50 grid place-items-center"><Icon.leave size={16} className="text-navy" /></div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-[13.5px] font-medium text-navy">{LEAVE_TYPE_LABEL[r.type]} · {r.days}d</p>
+                      <p className="text-[12px] text-graphite-500">{fmt(r.startDate)}–{fmt(r.endDate)}{r.reason ? ` · ${r.reason}` : ""}</p>
+                    </div>
+                    <Badge tone={statusTone(r.status)}>{r.status[0] + r.status.slice(1).toLowerCase()}</Badge>
+                    {r.status === "PENDING" && <CancelBtn id={r.id} />}
+                  </div>
+                ))}
+              </div>
+            )}
+          </Card>
+        </div>
+
+        <div className="space-y-5">
+          <Card className="p-5">
+            <h2 className="text-sm font-semibold text-navy mb-3">Company holidays</h2>
+            <div className="space-y-2.5">
+              {holidays.map((h) => (
+                <div key={h.id} className="flex items-center justify-between text-[13px]">
+                  <span className="text-graphite-700">{h.name}</span>
+                  <span className="text-graphite-500">{fmt(h.date)}</span>
+                </div>
+              ))}
+              {holidays.length === 0 && <p className="text-[13px] text-graphite-500">No holidays set.</p>}
+            </div>
+          </Card>
+          <Card className="p-5">
+            <h2 className="text-sm font-semibold text-navy mb-3">Who's away</h2>
+            <div className="space-y-3">
+              {upcoming.length === 0 ? <p className="text-[13px] text-graphite-500">Nobody's out right now.</p> :
+                upcoming.map((u) => (
+                  <div key={u.id} className="flex items-center gap-2.5">
+                    <Avatar name={u.name} src={u.image} size={28} />
+                    <div className="flex-1"><p className="text-[13px] font-medium text-navy">{u.name}</p><p className="text-[12px] text-graphite-500">{LEAVE_TYPE_LABEL[u.type]} · {fmt(u.startDate)}–{fmt(u.endDate)}</p></div>
+                  </div>
+                ))}
+            </div>
+          </Card>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function RequestForm({ close }: { close: () => void }) {
+  const router = useRouter();
+  const [f, setF] = useState({ type: "VACATION", startDate: "", endDate: "", reason: "" });
+  const [loading, setLoading] = useState(false); const [error, setError] = useState("");
+  async function submit(e: React.FormEvent) {
+    e.preventDefault(); setLoading(true); setError("");
+    const res = await requestLeave(f); setLoading(false);
+    if (!res.ok) { setError(res.error || "Error"); return; }
+    close(); router.refresh();
+  }
+  return (
+    <form onSubmit={submit} className="space-y-4">
+      <div><Label>Leave type</Label><Select value={f.type} onChange={(e) => setF({ ...f, type: e.target.value })}>{Object.entries(LEAVE_TYPE_LABEL).map(([k, v]) => <option key={k} value={k}>{v}</option>)}</Select></div>
+      <div className="grid grid-cols-2 gap-3">
+        <div><Label>Start date</Label><Input type="date" value={f.startDate} onChange={(e) => setF({ ...f, startDate: e.target.value })} required /></div>
+        <div><Label>End date</Label><Input type="date" value={f.endDate} onChange={(e) => setF({ ...f, endDate: e.target.value })} required /></div>
+      </div>
+      <div><Label>Reason (optional)</Label><Textarea value={f.reason} onChange={(e) => setF({ ...f, reason: e.target.value })} placeholder="Family trip…" /></div>
+      {error && <p className="text-[13px] text-bad">{error}</p>}
+      <div className="flex justify-end gap-2"><Button variant="secondary" onClick={close}>Cancel</Button><Button type="submit" disabled={loading}>{loading ? "Submitting…" : "Submit request"}</Button></div>
+    </form>
+  );
+}
+
+function ApprovalRow({ r }: { r: Req }) {
+  const router = useRouter();
+  const [busy, setBusy] = useState(false);
+  async function decide(approve: boolean) { setBusy(true); await decideLeave(r.id, approve); setBusy(false); router.refresh(); }
+  return (
+    <div className="flex items-center gap-3 py-2.5">
+      <Avatar name={r.employeeName} src={r.employeeImage} size={32} />
+      <div className="flex-1 min-w-0">
+        <p className="text-[13.5px] font-medium text-navy">{r.employeeName}</p>
+        <p className="text-[12px] text-graphite-500">{LEAVE_TYPE_LABEL[r.type]} · {fmt(r.startDate)}–{fmt(r.endDate)} · {r.days}d{r.reason ? ` · ${r.reason}` : ""}</p>
+      </div>
+      <Button size="sm" variant="secondary" onClick={() => decide(false)} disabled={busy}>Decline</Button>
+      <Button size="sm" variant="primary" onClick={() => decide(true)} disabled={busy}>Approve</Button>
+    </div>
+  );
+}
+
+function CancelBtn({ id }: { id: string }) {
+  const router = useRouter(); const [busy, setBusy] = useState(false);
+  return <button onClick={async () => { setBusy(true); await cancelLeave(id); setBusy(false); router.refresh(); }} disabled={busy} className="text-[12px] text-graphite-400 hover:text-bad">Cancel</button>;
+}

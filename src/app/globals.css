@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { color-scheme: light; }
+
+html, body { height: 100%; }
+body {
+  background: #FBFBFC;
+  color: #171A21;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Thin, calm scrollbars */
+* { scrollbar-width: thin; scrollbar-color: #DDE1E8 transparent; }
+*::-webkit-scrollbar { width: 8px; height: 8px; }
+*::-webkit-scrollbar-thumb { background: #DDE1E8; border-radius: 8px; }
+
+.kbd {
+  font-size: 11px; line-height: 1; padding: 3px 5px; border-radius: 5px;
+  border: 1px solid #DDE1E8; background: #fff; color: #6B7280; box-shadow: 0 1px 0 #ECEEF2;
+}
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(6px);} to { opacity: 1; transform: none;} }
+.animate-fadeUp { animation: fadeUp .35s ease both; }
+
+.grid-faint {
+  background-image: linear-gradient(to right, rgba(13,14,36,.04) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(13,14,36,.04) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
