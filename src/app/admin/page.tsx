@@ -7,7 +7,7 @@ import { CreateEntityButton } from "@/components/admin/CreateEntityButton";
 import { APP_DOMAIN } from "@/lib/constants";
 import { fmtDate } from "@/lib/format";
 
-const statusTone = (s: string) => (s === "active" ? "good" : s === "suspended" ? "bad" : "warn") as const;
+const statusTone = (s: string): "good" | "warn" | "bad" | "neutral" | "accent" | "navy" => (s === "active" ? "good" : s === "suspended" ? "bad" : "warn");
 
 export default async function AdminHome() {
   await requirePlatformAdmin();

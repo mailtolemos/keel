@@ -8,7 +8,7 @@ import { createChangelogEntry, updateChangelogEntry, deleteChangelogEntry } from
 import { fmtDate } from "@/lib/format";
 
 type Entry = { id: string; title: string; category: string; summary: string; changes: string; date: string; published: boolean };
-const catTone = (c: string) => (c === "Feature" ? "accent" : c === "Improvement" ? "navy" : "neutral") as const;
+const catTone = (c: string): "good" | "warn" | "bad" | "neutral" | "accent" | "navy" => (c === "Feature" ? "accent" : c === "Improvement" ? "navy" : "neutral");
 
 export function ChangelogManager({ entries }: { entries: Entry[] }) {
   return (
