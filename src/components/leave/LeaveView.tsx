@@ -22,6 +22,7 @@ export function LeaveView({ balance, allowance, myRequests, pending, holidays, u
   canApprove: boolean;
 }) {
   const used = allowance - balance;
+  const t = useT();
   return (
     <div>
       <PageHeader title={t("leave.title")} subtitle={t("leave.subtitle")}

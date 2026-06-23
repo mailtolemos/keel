@@ -13,6 +13,7 @@ type Member = { id: string; name: string; title: string | null; image: string | 
 type Team = { id: string; name: string; description: string | null; leadId: string | null; lead: string | null; members: Member[] };
 
 export function TeamsView({ teams, allPeople, canManage, slug }: { teams: Team[]; allPeople: { id: string; name: string; teamId: string | null }[]; canManage: boolean; slug: string }) {
+  const t = useT();
   return (
     <div>
       <PageHeader title={t("teams.title")} subtitle={t("teams.subtitle", { teams: teams.length, n: allPeople.length })}
