@@ -38,11 +38,11 @@ function Form({ close }: { close: () => void }) {
       <div><Label>Company name</Label><Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Douro Labs" autoFocus required /></div>
       <div>
         <Label>Workspace address</Label>
-        <div className="flex items-center gap-1 rounded-lg border border-graphite-200 bg-graphite-50 px-3 h-9 text-sm">
-          <span className="text-graphite-500">{APP_DOMAIN}/</span>
-          <input value={slug} onChange={(e) => setSlug(e.target.value)} placeholder={slugPreview(name) || "dourolabs"} className="flex-1 bg-transparent focus:outline-none text-navy font-medium" />
+        <div className="flex items-center gap-1 rounded-lg border border-line bg-surface-2 px-3 h-9 text-sm">
+          <span className="text-ink-soft">{APP_DOMAIN}/</span>
+          <input value={slug} onChange={(e) => setSlug(e.target.value)} placeholder={slugPreview(name) || "dourolabs"} className="flex-1 bg-transparent focus:outline-none text-ink font-medium" />
         </div>
-        <p className="mt-1 text-[12px] text-graphite-500">Will be created at <span className="font-medium text-navy">{APP_DOMAIN}/{effectiveSlug}</span></p>
+        <p className="mt-1 text-[12px] text-ink-soft">Will be created at <span className="font-medium text-ink">{APP_DOMAIN}/{effectiveSlug}</span></p>
       </div>
       <div><Label>Country</Label><Select value={country} onChange={(e) => setCountry(e.target.value)}>{COUNTRIES.map((c) => <option key={c}>{c}</option>)}</Select></div>
       {error && <p className="text-[13px] text-bad">{error}</p>}

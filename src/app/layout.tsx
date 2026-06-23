@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
+import { I18nProvider } from "@/i18n/I18nProvider";
+import { getLocale } from "@/i18n/server";
+import { getDictionary } from "@/i18n/dictionaries";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 
@@ -30,10 +33,12 @@ export const viewport = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const locale = getLocale();
+  const dict = getDictionary(locale);
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang={locale} className={inter.variable} suppressHydrationWarning>
       <body className="font-sans antialiased">
-        <Providers>{children}</Providers>
+        <Providers><I18nProvider locale={locale} dict={dict}>{children}</I18nProvider></Providers>
       </body>
     </html>
   );

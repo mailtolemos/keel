@@ -24,9 +24,9 @@ export function CreateCycleForm({ people, slug, close }: { people: { id: string;
 
   const toggleP = (id: string) => setParticipantIds((s) => s.includes(id) ? s.filter((x) => x !== id) : [...s, id]);
   const optRow = (k: keyof typeof opts, label: string, hint: string) => (
-    <label className="flex items-start gap-2.5 rounded-lg border border-graphite-200 px-3 py-2 cursor-pointer hover:bg-graphite-50">
+    <label className="flex items-start gap-2.5 rounded-lg border border-line px-3 py-2 cursor-pointer hover:bg-surface-2">
       <input type="checkbox" checked={opts[k]} onChange={() => setOpts((s) => ({ ...s, [k]: !s[k] }))} className="mt-0.5 accent-accent h-4 w-4" />
-      <span><span className="text-[13.5px] font-medium text-navy block">{label}</span><span className="text-[12px] text-graphite-500">{hint}</span></span>
+      <span><span className="text-[13.5px] font-medium text-ink block">{label}</span><span className="text-[12px] text-ink-soft">{hint}</span></span>
     </label>
   );
 
@@ -62,17 +62,17 @@ export function CreateCycleForm({ people, slug, close }: { people: { id: string;
       </div>
       <div>
         <Label>Participants ({participantIds.length})</Label>
-        <div className="max-h-44 overflow-y-auto rounded-lg border border-graphite-200 divide-y divide-graphite-100">
+        <div className="max-h-44 overflow-y-auto rounded-lg border border-line divide-y divide-line-2">
           {people.map((p) => (
-            <label key={p.id} className="flex items-center gap-2.5 px-3 py-1.5 cursor-pointer hover:bg-graphite-50">
+            <label key={p.id} className="flex items-center gap-2.5 px-3 py-1.5 cursor-pointer hover:bg-surface-2">
               <input type="checkbox" checked={participantIds.includes(p.id)} onChange={() => toggleP(p.id)} className="accent-accent h-4 w-4" />
-              <span className="text-[13px] text-navy">{p.name}</span><span className="text-[12px] text-graphite-400">{p.title}</span>
+              <span className="text-[13px] text-ink">{p.name}</span><span className="text-[12px] text-ink-faint">{p.title}</span>
             </label>
           ))}
         </div>
       </div>
       {error && <p className="text-[13px] text-bad">{error}</p>}
-      <div className="flex justify-end gap-2 pt-1 sticky bottom-0 bg-white"><Button variant="secondary" onClick={close}>Cancel</Button><Button type="submit" disabled={loading}>{loading ? "Creating…" : "Launch cycle"}</Button></div>
+      <div className="flex justify-end gap-2 pt-1 sticky bottom-0 bg-surface"><Button variant="secondary" onClick={close}>Cancel</Button><Button type="submit" disabled={loading}>{loading ? "Creating…" : "Launch cycle"}</Button></div>
     </form>
   );
 }

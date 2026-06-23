@@ -19,12 +19,12 @@ export default async function ManageEntity({ params }: { params: { companyId: st
 
   return (
     <div>
-      <Link href="/admin" className="inline-flex items-center gap-1.5 text-[13px] text-graphite-500 hover:text-navy mb-4"><Icon.chevron size={14} className="rotate-90" /> Entities</Link>
+      <Link href="/admin" className="inline-flex items-center gap-1.5 text-[13px] text-ink-soft hover:text-ink mb-4"><Icon.chevron size={14} className="rotate-90" /> Entities</Link>
 
       <div className="flex items-start justify-between mb-6 gap-4">
         <div>
-          <h1 className="text-[22px] font-semibold tracking-tight text-navy">{company.name}</h1>
-          <p className="text-[13px] text-graphite-500 mt-0.5">{APP_DOMAIN}/{company.slug} · created {fmtDate(company.createdAt)}</p>
+          <h1 className="text-[22px] font-semibold tracking-tight text-ink">{company.name}</h1>
+          <p className="text-[13px] text-ink-soft mt-0.5">{APP_DOMAIN}/{company.slug} · created {fmtDate(company.createdAt)}</p>
         </div>
         <LinkButton href={`/${company.slug}`} variant="primary">Open workspace</LinkButton>
       </div>
@@ -39,13 +39,13 @@ export default async function ManageEntity({ params }: { params: { companyId: st
       <div className="grid lg:grid-cols-2 gap-5">
         <EntityManageForm id={company.id} initial={{ name: company.name, slug: company.slug, status: company.status, country: company.country }} />
         <Card className="p-5">
-          <h2 className="text-sm font-semibold text-navy mb-3">Teams</h2>
-          {company.teams.length === 0 ? <p className="text-[13px] text-graphite-500">No teams yet.</p> : (
+          <h2 className="text-sm font-semibold text-ink mb-3">Teams</h2>
+          {company.teams.length === 0 ? <p className="text-[13px] text-ink-soft">No teams yet.</p> : (
             <div className="space-y-2">
               {company.teams.map((t) => (
                 <div key={t.id} className="flex items-center justify-between text-[13px]">
-                  <span className="text-graphite-700">{t.name}</span>
-                  <span className="text-graphite-500">{t._count.members} {t._count.members === 1 ? "person" : "people"}</span>
+                  <span className="text-ink-muted">{t.name}</span>
+                  <span className="text-ink-soft">{t._count.members} {t._count.members === 1 ? "person" : "people"}</span>
                 </div>
               ))}
             </div>

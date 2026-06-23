@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { PageHeader } from "@/components/PageHeader";
 import { Card, Avatar, Badge, Button, Input, Label, Textarea, Select } from "@/components/ui";
+import { useT } from "@/i18n/I18nProvider";
 import { Dialog } from "@/components/Dialog";
 import { Icon } from "@/components/icons";
 import { createTeam, updateTeam, moveMember } from "@/app/actions/teams";
@@ -14,9 +15,9 @@ type Team = { id: string; name: string; description: string | null; leadId: stri
 export function TeamsView({ teams, allPeople, canManage, slug }: { teams: Team[]; allPeople: { id: string; name: string; teamId: string | null }[]; canManage: boolean; slug: string }) {
   return (
     <div>
-      <PageHeader title="Teams" subtitle={`${teams.length} teams · ${allPeople.length} people`}
+      <PageHeader title={t("teams.title")} subtitle={t("teams.subtitle", { teams: teams.length, n: allPeople.length })}
         action={canManage && (
-          <Dialog title="Create a team" trigger={<><Icon.plus size={16} /> New team</>}>
+          <Dialog title="Create a team" trigger={<><Icon.plus size={16} /> {t("teams.new")}</>}>
             {(close) => <TeamForm people={allPeople} close={close} />}
           </Dialog>
         )} />
@@ -25,8 +26,8 @@ export function TeamsView({ teams, allPeople, canManage, slug }: { teams: Team[]
           <Card key={t.id} className="p-5">
             <div className="flex items-start justify-between">
               <div>
-                <h3 className="font-semibold text-navy">{t.name}</h3>
-                <p className="text-[13px] text-graphite-500 mt-0.5">{t.description ?? "—"}</p>
+                <h3 className="font-semibold text-ink">{t.name}</h3>
+                <p className="text-[13px] text-ink-soft mt-0.5">{t.description ?? "—"}</p>
               </div>
               {canManage && (
                 <Dialog title={`Manage ${t.name}`} trigger="Manage" triggerVariant="ghost" triggerSize="sm">
@@ -34,7 +35,7 @@ export function TeamsView({ teams, allPeople, canManage, slug }: { teams: Team[]
                 </Dialog>
               )}
             </div>
-            <div className="mt-3 flex items-center gap-2 text-[12px] text-graphite-500">
+            <div className="mt-3 flex items-center gap-2 text-[12px] text-ink-soft">
               <Badge tone="navy">Lead</Badge><span>{t.lead ?? "Unassigned"}</span>
               <span className="ml-auto">{t.members.length} {t.members.length === 1 ? "member" : "members"}</span>
             </div>
@@ -42,7 +43,7 @@ export function TeamsView({ teams, allPeople, canManage, slug }: { teams: Team[]
               {t.members.slice(0, 10).map((m) => (
                 <Link key={m.id} href={`/${slug}/people/${m.id}`} title={m.name}><Avatar name={m.name} src={m.image} size={30} /></Link>
               ))}
-              {t.members.length === 0 && <p className="text-[13px] text-graphite-400">No members yet.</p>}
+              {t.members.length === 0 && <p className="text-[13px] text-ink-faint">No members yet.</p>}
             </div>
           </Card>
         ))}
@@ -54,6 +55,7 @@ export function TeamsView({ teams, allPeople, canManage, slug }: { teams: Team[]
 function TeamForm({ people, close }: { people: { id: string; name: string }[]; close: () => void }) {
   const router = useRouter();
   const [f, setF] = useState({ name: "", description: "", leadId: "" });
+  const t = useT();
   const [loading, setLoading] = useState(false); const [error, setError] = useState("");
   async function submit(e: React.FormEvent) {
     e.preventDefault(); setLoading(true); setError("");
@@ -92,8 +94,8 @@ function ManageTeam({ team, people, close }: { team: Team; people: { id: string;
         <Label>Members</Label>
         <div className="space-y-1.5 mb-2 max-h-40 overflow-y-auto">
           {team.members.map((m) => (
-            <div key={m.id} className="flex items-center justify-between rounded-lg border border-graphite-200 px-2.5 py-1.5">
-              <span className="text-[13px] text-navy">{m.name}</span>
+            <div key={m.id} className="flex items-center justify-between rounded-lg border border-line px-2.5 py-1.5">
+              <span className="text-[13px] text-ink">{m.name}</span>
               <button onClick={() => remove(m.id)} className="text-[12px] text-bad hover:underline">Remove</button>
             </div>
           ))}

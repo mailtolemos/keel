@@ -1,10 +1,17 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
+  darkMode: "class",
   content: ["./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {
+        // Theme-aware semantic tokens (drive light/dark). Values come from CSS vars.
+        bg: "var(--bg)",
+        surface: { DEFAULT: "var(--surface)", "2": "var(--surface-2)", "3": "var(--surface-3)" },
+        line: { DEFAULT: "var(--line)", "2": "var(--line-2)" },
+        ink: { DEFAULT: "var(--ink)", muted: "var(--ink-muted)", soft: "var(--ink-soft)", faint: "var(--ink-faint)" },
+        "accent-soft": "var(--accent-soft)",
         // Keel palette: navy, graphite, off-white + single accent (indigo)
         navy: {
           DEFAULT: "#0D0E24",
@@ -33,8 +40,8 @@ const config: Config = {
       },
       borderRadius: { lg: "10px", xl: "14px" },
       boxShadow: {
-        card: "0 1px 2px rgba(13,14,36,0.04), 0 1px 3px rgba(13,14,36,0.06)",
-        pop: "0 8px 28px rgba(13,14,36,0.12)",
+        card: "var(--shadow-card)",
+        pop: "var(--shadow-pop)",
         focus: "0 0 0 3px rgba(78,43,214,0.18)"
       }
     }

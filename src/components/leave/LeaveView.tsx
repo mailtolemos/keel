@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { PageHeader } from "@/components/PageHeader";
 import { Card, Stat, Avatar, Badge, Button, Input, Label, Select, Textarea, Progress } from "@/components/ui";
+import { useT } from "@/i18n/I18nProvider";
 import { Dialog } from "@/components/Dialog";
 import { Icon } from "@/components/icons";
 import { requestLeave, decideLeave, cancelLeave } from "@/app/actions/leave";
@@ -23,8 +24,8 @@ export function LeaveView({ balance, allowance, myRequests, pending, holidays, u
   const used = allowance - balance;
   return (
     <div>
-      <PageHeader title="Leave" subtitle="Request time off, track balances, and see who's away."
-        action={<Dialog title="Request time off" trigger={<><Icon.plus size={16} /> Request time off</>}>{(close) => <RequestForm close={close} />}</Dialog>} />
+      <PageHeader title={t("leave.title")} subtitle={t("leave.subtitle")}
+        action={<Dialog title="Request time off" trigger={<><Icon.plus size={16} /> {t("leave.request")}</>}>{(close) => <RequestForm close={close} />}</Dialog>} />
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
         <Stat label="Vacation remaining" value={`${balance}d`} sub={`of ${allowance}d this year`} />
@@ -37,24 +38,24 @@ export function LeaveView({ balance, allowance, myRequests, pending, holidays, u
         <div className="lg:col-span-2 space-y-5">
           {canApprove && (
             <Card className="p-5">
-              <h2 className="text-sm font-semibold text-navy mb-3">Pending approvals</h2>
-              {pending.length === 0 ? <p className="text-[13px] text-graphite-500">Nothing awaiting your approval.</p> : (
-                <div className="divide-y divide-graphite-100 -my-1">
+              <h2 className="text-sm font-semibold text-ink mb-3">Pending approvals</h2>
+              {pending.length === 0 ? <p className="text-[13px] text-ink-soft">Nothing awaiting your approval.</p> : (
+                <div className="divide-y divide-line-2 -my-1">
                   {pending.map((r) => <ApprovalRow key={r.id} r={r} />)}
                 </div>
               )}
             </Card>
           )}
           <Card className="p-5">
-            <h2 className="text-sm font-semibold text-navy mb-3">Your requests</h2>
-            {myRequests.length === 0 ? <p className="text-[13px] text-graphite-500">No requests yet.</p> : (
-              <div className="divide-y divide-graphite-100 -my-1">
+            <h2 className="text-sm font-semibold text-ink mb-3">Your requests</h2>
+            {myRequests.length === 0 ? <p className="text-[13px] text-ink-soft">No requests yet.</p> : (
+              <div className="divide-y divide-line-2 -my-1">
                 {myRequests.map((r) => (
                   <div key={r.id} className="flex items-center gap-3 py-2.5">
-                    <div className="h-8 w-8 rounded-lg bg-navy-50 grid place-items-center"><Icon.leave size={16} className="text-navy" /></div>
+                    <div className="h-8 w-8 rounded-lg bg-accent-soft grid place-items-center"><Icon.leave size={16} className="text-ink" /></div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-[13.5px] font-medium text-navy">{LEAVE_TYPE_LABEL[r.type]} · {r.days}d</p>
-                      <p className="text-[12px] text-graphite-500">{fmt(r.startDate)}–{fmt(r.endDate)}{r.reason ? ` · ${r.reason}` : ""}</p>
+                      <p className="text-[13.5px] font-medium text-ink">{LEAVE_TYPE_LABEL[r.type]} · {r.days}d</p>
+                      <p className="text-[12px] text-ink-soft">{fmt(r.startDate)}–{fmt(r.endDate)}{r.reason ? ` · ${r.reason}` : ""}</p>
                     </div>
                     <Badge tone={statusTone(r.status)}>{r.status[0] + r.status.slice(1).toLowerCase()}</Badge>
                     {r.status === "PENDING" && <CancelBtn id={r.id} />}
@@ -67,25 +68,25 @@ export function LeaveView({ balance, allowance, myRequests, pending, holidays, u
 
         <div className="space-y-5">
           <Card className="p-5">
-            <h2 className="text-sm font-semibold text-navy mb-3">Company holidays</h2>
+            <h2 className="text-sm font-semibold text-ink mb-3">Company holidays</h2>
             <div className="space-y-2.5">
               {holidays.map((h) => (
                 <div key={h.id} className="flex items-center justify-between text-[13px]">
-                  <span className="text-graphite-700">{h.name}</span>
-                  <span className="text-graphite-500">{fmt(h.date)}</span>
+                  <span className="text-ink-muted">{h.name}</span>
+                  <span className="text-ink-soft">{fmt(h.date)}</span>
                 </div>
               ))}
-              {holidays.length === 0 && <p className="text-[13px] text-graphite-500">No holidays set.</p>}
+              {holidays.length === 0 && <p className="text-[13px] text-ink-soft">No holidays set.</p>}
             </div>
           </Card>
           <Card className="p-5">
-            <h2 className="text-sm font-semibold text-navy mb-3">Who's away</h2>
+            <h2 className="text-sm font-semibold text-ink mb-3">Who's away</h2>
             <div className="space-y-3">
-              {upcoming.length === 0 ? <p className="text-[13px] text-graphite-500">Nobody's out right now.</p> :
+              {upcoming.length === 0 ? <p className="text-[13px] text-ink-soft">Nobody's out right now.</p> :
                 upcoming.map((u) => (
                   <div key={u.id} className="flex items-center gap-2.5">
                     <Avatar name={u.name} src={u.image} size={28} />
-                    <div className="flex-1"><p className="text-[13px] font-medium text-navy">{u.name}</p><p className="text-[12px] text-graphite-500">{LEAVE_TYPE_LABEL[u.type]} · {fmt(u.startDate)}–{fmt(u.endDate)}</p></div>
+                    <div className="flex-1"><p className="text-[13px] font-medium text-ink">{u.name}</p><p className="text-[12px] text-ink-soft">{LEAVE_TYPE_LABEL[u.type]} · {fmt(u.startDate)}–{fmt(u.endDate)}</p></div>
                   </div>
                 ))}
             </div>
@@ -99,6 +100,7 @@ export function LeaveView({ balance, allowance, myRequests, pending, holidays, u
 function RequestForm({ close }: { close: () => void }) {
   const router = useRouter();
   const [f, setF] = useState({ type: "VACATION", startDate: "", endDate: "", reason: "" });
+  const t = useT();
   const [loading, setLoading] = useState(false); const [error, setError] = useState("");
   async function submit(e: React.FormEvent) {
     e.preventDefault(); setLoading(true); setError("");
@@ -128,8 +130,8 @@ function ApprovalRow({ r }: { r: Req }) {
     <div className="flex items-center gap-3 py-2.5">
       <Avatar name={r.employeeName} src={r.employeeImage} size={32} />
       <div className="flex-1 min-w-0">
-        <p className="text-[13.5px] font-medium text-navy">{r.employeeName}</p>
-        <p className="text-[12px] text-graphite-500">{LEAVE_TYPE_LABEL[r.type]} · {fmt(r.startDate)}–{fmt(r.endDate)} · {r.days}d{r.reason ? ` · ${r.reason}` : ""}</p>
+        <p className="text-[13.5px] font-medium text-ink">{r.employeeName}</p>
+        <p className="text-[12px] text-ink-soft">{LEAVE_TYPE_LABEL[r.type]} · {fmt(r.startDate)}–{fmt(r.endDate)} · {r.days}d{r.reason ? ` · ${r.reason}` : ""}</p>
       </div>
       <Button size="sm" variant="secondary" onClick={() => decide(false)} disabled={busy}>Decline</Button>
       <Button size="sm" variant="primary" onClick={() => decide(true)} disabled={busy}>Approve</Button>
@@ -139,5 +141,5 @@ function ApprovalRow({ r }: { r: Req }) {
 
 function CancelBtn({ id }: { id: string }) {
   const router = useRouter(); const [busy, setBusy] = useState(false);
-  return <button onClick={async () => { setBusy(true); await cancelLeave(id); setBusy(false); router.refresh(); }} disabled={busy} className="text-[12px] text-graphite-400 hover:text-bad">Cancel</button>;
+  return <button onClick={async () => { setBusy(true); await cancelLeave(id); setBusy(false); router.refresh(); }} disabled={busy} className="text-[12px] text-ink-faint hover:text-bad">Cancel</button>;
 }

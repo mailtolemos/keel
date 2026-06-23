@@ -24,3 +24,4 @@ npm-debug.log*
 
 # legacy (sqlite migration kept for reference, not used)
 prisma/_migrations_sqlite_legacy
+.env*

@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { PageHeader } from "@/components/PageHeader";
 import { Card, Avatar, Badge, Button, Input, Label, Select, Textarea, Progress, cn } from "@/components/ui";
+import { useT } from "@/i18n/I18nProvider";
 import { Dialog } from "@/components/Dialog";
 import { Icon } from "@/components/icons";
 import { createGoal, updateGoal } from "@/app/actions/goals";
@@ -17,21 +18,22 @@ const levelLabel: Record<string, string> = { COMPANY: "Company", TEAM: "Team", I
 
 export function GoalsView({ goals, people, teams }: { goals: Goal[]; people: { id: string; name: string }[]; teams: { id: string; name: string }[] }) {
   const [level, setLevel] = useState("all");
+  const t = useT();
   const shown = level === "all" ? goals : goals.filter((g) => g.level === level);
   return (
     <div>
-      <PageHeader title="Goals" subtitle="Company, team, and individual goals — visible and connected."
-        action={<Dialog wide title="Create a goal" trigger={<><Icon.plus size={16} /> New goal</>}>{(close) => <GoalForm people={people} teams={teams} close={close} />}</Dialog>} />
+      <PageHeader title={t("goals.title")} subtitle={t("goals.subtitle")}
+        action={<Dialog wide title="Create a goal" trigger={<><Icon.plus size={16} /> {t("goals.new")}</>}>{(close) => <GoalForm people={people} teams={teams} close={close} />}</Dialog>} />
 
-      <div className="inline-flex rounded-lg border border-graphite-200 bg-white p-0.5 mb-4">
+      <div className="inline-flex rounded-lg border border-line bg-surface p-0.5 mb-4">
         {["all", "COMPANY", "TEAM", "INDIVIDUAL"].map((l) => (
-          <button key={l} onClick={() => setLevel(l)} className={cn("h-8 px-3.5 rounded-md text-[13px] font-medium transition", level === l ? "bg-navy text-white" : "text-graphite-600 hover:text-navy")}>{l === "all" ? "All" : levelLabel[l]}</button>
+          <button key={l} onClick={() => setLevel(l)} className={cn("h-8 px-3.5 rounded-md text-[13px] font-medium transition", level === l ? "bg-navy text-white" : "text-ink-muted hover:text-ink")}>{l === "all" ? "All" : levelLabel[l]}</button>
         ))}
       </div>
 
       <div className="grid gap-4 md:grid-cols-2">
         {shown.map((g) => <GoalCard key={g.id} g={g} />)}
-        {shown.length === 0 && <Card className="p-10 text-center text-[13px] text-graphite-500 md:col-span-2">No goals at this level yet.</Card>}
+        {shown.length === 0 && <Card className="p-10 text-center text-[13px] text-ink-soft md:col-span-2">No goals at this level yet.</Card>}
       </div>
     </div>
   );
@@ -47,20 +49,20 @@ function GoalCard({ g }: { g: Goal }) {
         </div>
         <Dialog wide title="Update goal" trigger="Update" triggerVariant="ghost" triggerSize="sm">{(close) => <UpdateForm g={g} close={close} />}</Dialog>
       </div>
-      <h3 className="font-semibold text-navy mt-2.5">{g.title}</h3>
-      {g.description && <p className="text-[13px] text-graphite-500 mt-1 line-clamp-2">{g.description}</p>}
+      <h3 className="font-semibold text-ink mt-2.5">{g.title}</h3>
+      {g.description && <p className="text-[13px] text-ink-soft mt-1 line-clamp-2">{g.description}</p>}
       <div className="mt-3.5">
-        <div className="flex justify-between text-[12px] mb-1"><span className="text-graphite-500">Progress</span><span className="font-medium text-navy">{g.progress}%</span></div>
+        <div className="flex justify-between text-[12px] mb-1"><span className="text-ink-soft">Progress</span><span className="font-medium text-ink">{g.progress}%</span></div>
         <Progress value={g.progress} tone={goalTone(g.status)} />
       </div>
-      <div className="mt-3.5 flex items-center justify-between text-[12px] text-graphite-500">
+      <div className="mt-3.5 flex items-center justify-between text-[12px] text-ink-soft">
         <div className="flex items-center gap-1.5">{g.owner && <Avatar name={g.owner} src={g.ownerImage} size={22} />}<span>{g.owner ?? "Unassigned"}</span></div>
         <span>Due {fmtDate(g.dueDate)}</span>
       </div>
       {g.updates.length > 0 && (
-        <div className="mt-3.5 border-t border-graphite-100 pt-3 space-y-2">
+        <div className="mt-3.5 border-t border-line-2 pt-3 space-y-2">
           {g.updates.slice(0, 2).map((u) => (
-            <div key={u.id} className="text-[12.5px]"><span className="text-graphite-700">{u.body}</span> <span className="text-graphite-400">· {u.author.split(" ")[0]}, {relativeTime(u.createdAt)}</span></div>
+            <div key={u.id} className="text-[12.5px]"><span className="text-ink-muted">{u.body}</span> <span className="text-ink-faint">· {u.author.split(" ")[0]}, {relativeTime(u.createdAt)}</span></div>
           ))}
         </div>
       )}
@@ -111,7 +113,7 @@ function UpdateForm({ g, close }: { g: Goal; close: () => void }) {
   }
   return (
     <form onSubmit={submit} className="space-y-4">
-      <p className="text-[13px] text-graphite-600">{g.title}</p>
+      <p className="text-[13px] text-ink-muted">{g.title}</p>
       <div className="grid grid-cols-2 gap-3">
         <div><Label>Progress ({progress}%)</Label><input type="range" min={0} max={100} value={progress} onChange={(e) => setProgress(Number(e.target.value))} className="w-full accent-accent" /></div>
         <div><Label>Status</Label><Select value={status} onChange={(e) => setStatus(e.target.value)}>{Object.entries(GOAL_STATUS_LABEL).map(([k, v]) => <option key={k} value={k}>{v}</option>)}</Select></div>

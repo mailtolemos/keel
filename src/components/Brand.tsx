@@ -14,7 +14,7 @@ export function Logo({ href = "/", light = false }: { href?: string; light?: boo
   return (
     <Link href={href} className="inline-flex items-center gap-2 font-semibold tracking-tight">
       <Mark />
-      <span className={light ? "text-white text-[17px]" : "text-navy text-[17px]"}>Keel</span>
+      <span className={light ? "text-white text-[17px]" : "text-ink text-[17px]"}>Keel</span>
     </Link>
   );
 }

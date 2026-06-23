@@ -1,0 +1,133 @@
+const en: Record<string, string> = {
+  // common
+  "common.save": "Save changes", "common.saving": "Saving…", "common.saved": "Saved",
+  "common.cancel": "Cancel", "common.create": "Create", "common.creating": "Creating…",
+  "common.add": "Add", "common.close": "Close", "common.back": "Back", "common.edit": "Edit",
+  "common.remove": "Remove", "common.delete": "Delete", "common.manage": "Manage", "common.open": "Open",
+  "common.continue": "Continue", "common.search": "Search…", "common.all": "All", "common.optional": "optional",
+  "common.shown": "{n} shown", "common.person": "person", "common.people": "people",
+
+  // nav
+  "nav.home": "Home", "nav.people": "People", "nav.teams": "Teams", "nav.reviews": "Reviews",
+  "nav.feedback": "Feedback", "nav.goals": "Goals", "nav.oneonones": "1:1s", "nav.leave": "Leave",
+  "nav.calendar": "Calendar", "nav.settings": "Settings",
+
+  // topbar / prefs
+  "topbar.search": "Search people, teams, goals…", "topbar.operator": "Operator",
+  "topbar.settings": "Settings", "topbar.operatorConsole": "Operator console",
+  "topbar.marketingSite": "Marketing site", "topbar.signOut": "Sign out",
+  "prefs.appearance": "Appearance", "prefs.language": "Language",
+  "theme.light": "Light", "theme.dark": "Dark", "theme.system": "System",
+  "role.admin": "Admin", "role.manager": "Manager", "role.employee": "Employee",
+
+  // auth
+  "auth.signInTitle": "Sign in to Keel", "auth.signInSubtitle": "Welcome back. Pick up where your team left off.",
+  "auth.workEmail": "Work email", "auth.password": "Password", "auth.signIn": "Sign in", "auth.signingIn": "Signing in…",
+  "auth.continueGoogle": "Continue with Google", "auth.googleHint": "Google sign-in activates once GOOGLE_CLIENT_ID is set in your environment.",
+  "auth.demoHint": "Exploring the demo? Use the seeded Lumen workspace.", "auth.fillDemo": "Fill demo admin (alex@lumen.co)",
+  "auth.wrongCreds": "Incorrect email or password.", "auth.newToKeel": "New to Keel?", "auth.createWorkspace": "Create a workspace",
+  "auth.createTitle": "Create your workspace", "auth.createSubtitle": "Give your company a stronger backbone. Takes about two minutes.",
+  "auth.yourName": "Your name", "auth.creating": "Creating…", "auth.createBtn": "Create workspace",
+  "auth.haveAccount": "Already have an account?", "auth.brandTagline": "The backbone of high-performing teams.",
+  "auth.brandSub": "Stay structured, aligned, and human as you grow — people, performance, feedback, leave, and goals in one calm system.",
+  "auth.f1": "People directory & org chart", "auth.f2": "Performance reviews & feedback", "auth.f3": "Leave, goals, and 1:1s",
+  "auth.backTo": "← Back to mykeel.org", "auth.passwordPh": "At least 8 characters",
+
+  // onboarding
+  "ob.setup": "Set up your workspace", "ob.step.company": "Company", "ob.step.country": "Country",
+  "ob.step.workweek": "Work week", "ob.step.holidays": "Holidays", "ob.step.team": "First team", "ob.step.invite": "Invite",
+  "ob.companyQ": "What's your company called?", "ob.companyHint": "You can change this anytime in settings.", "ob.companyName": "Company name",
+  "ob.countryQ": "Where are you based?", "ob.countryHint": "Sets your default holiday calendar and locale.", "ob.country": "Country",
+  "ob.workweekQ": "What's your work week?", "ob.workweekHint": "Used for leave calculations and the team calendar.",
+  "ob.holidaysQ": "Default holidays", "ob.holidaysHint": "Pick a starter set — add your own later.",
+  "ob.teamQ": "Create your first team", "ob.teamHint": "Most companies start with Leadership or Engineering.", "ob.teamName": "Team name",
+  "ob.inviteQ": "Invite a few teammates", "ob.inviteHint": "Optional — they'll appear as invited in your directory. Add more later.",
+  "ob.addAnother": "+ Add another", "ob.finish": "Finish setup", "ob.creating": "Creating workspace…", "ob.name": "Name", "ob.email": "email@company.com",
+
+  // landing
+  "landing.product": "Product", "landing.why": "Why Keel", "landing.whatsnew": "What's new", "landing.usecases": "Use cases",
+  "landing.signIn": "Sign in", "landing.startBuilding": "Start building your team", "landing.badge": "The organizational backbone for modern companies",
+  "landing.heroTitle1": "The backbone of", "landing.heroTitle2": "high-performing teams.",
+  "landing.heroSub": "Keel helps growing companies manage people, performance, feedback, leave, and goals without the weight of traditional HR software.",
+  "landing.viewDemo": "View demo →", "landing.heroNote": "No credit card. Demo workspace included.",
+  "landing.problemTag": "The problem", "landing.problemTitle": "People systems break as companies grow.",
+  "landing.problemCopy": "Spreadsheets, scattered docs, Slack messages, and rigid HR tools make it hard to keep teams aligned. The structure that worked at ten people quietly falls apart at fifty.",
+  "landing.scattered": "Scattered", "landing.scatteredD": "People data lives in five different tools and nobody trusts any of them.",
+  "landing.rigid": "Rigid", "landing.rigidD": "Legacy HR software forces your company into someone else's process.",
+  "landing.invisible": "Invisible", "landing.invisibleD": "Goals, feedback, and reviews disappear into docs no one reopens.",
+  "landing.solutionTag": "The solution", "landing.solutionTitle": "One adaptable system for your organization.",
+  "landing.whyTag": "Why Keel", "landing.whyTitle": "Built around how your company works.",
+  "landing.whyCopy": "Keel gives startups and growing companies the structure they need — without forcing them into someone else's process. Flexible, lightweight, and quietly powerful.",
+  "landing.calm": "Calm by default", "landing.calmD": "An operational surface that's quiet until you need it — no noise, no clutter.",
+  "landing.flexible": "Flexible structure", "landing.flexibleD": "Teams, roles, policies, and cycles you can shape to your company.",
+  "landing.human": "Human at the core", "landing.humanD": "Stay structured and aligned as you grow, without losing the people.",
+  "landing.newTag": "What's new", "landing.newTitle": "The latest in Keel.",
+  "landing.newCopy": "A running log of what we're shipping — features, improvements, and fixes, as they land.", "landing.newEmpty": "No updates published yet.",
+  "landing.useTag": "Use cases", "landing.useTitle": "From first hire to fiftieth and beyond.",
+  "landing.closingTitle": "Give your company a stronger backbone.", "landing.closingCopy": "Set up your workspace in minutes. Bring your team along when you're ready.",
+  "landing.getStarted": "Get started", "landing.footerTagline": "The backbone of high-performing teams.",
+  "sol.people": "People directory", "sol.peopleD": "Every person, role, and reporting line in one living source of truth.",
+  "sol.reviews": "Reviews", "sol.reviewsD": "Run self, manager, and peer reviews on cycles that fit your company.",
+  "sol.feedback": "Feedback", "sol.feedbackD": "Lightweight, continuous feedback and public praise — not annual dread.",
+  "sol.leave": "Leave", "sol.leaveD": "Requests, approvals, balances, and a calendar everyone can see.",
+  "sol.goals": "Goals", "sol.goalsD": "Company, team, and individual goals — visible and connected.",
+  "sol.oneonones": "1:1s", "sol.oneononesD": "Recurring agendas, shared notes, and action items that carry over.",
+  "sol.org": "Org structure", "sol.orgD": "See teams, leads, and direct reports without untangling a spreadsheet.",
+  "use.reviews": "Run performance reviews", "use.reviewsD": "Spin up a cycle, choose participants, and track completion end-to-end.",
+  "use.leave": "Manage time off", "use.leaveD": "Approvals, balances, and team availability in one calm calendar.",
+  "use.structure": "Understand team structure", "use.structureD": "An org chart that stays current as people move and teams grow.",
+  "use.goals": "Keep goals visible", "use.goalsD": "Tie individual work to team and company outcomes.",
+  "use.managers": "Support managers", "use.managersD": "1:1s, feedback, and reviews that make managing people easier.",
+  "use.grow": "Grow people intentionally", "use.growD": "Turn feedback and reviews into real development.",
+
+  // dashboard
+  "dash.morning": "Good morning", "dash.afternoon": "Good afternoon", "dash.evening": "Good evening",
+  "dash.title": "{company} dashboard", "dash.people": "People", "dash.pendingLeave": "Pending leave",
+  "dash.reviewCompletion": "Review completion", "dash.avgGoal": "Avg goal progress",
+  "dash.goalProgress": "Goal progress", "dash.viewAll": "View all", "dash.pendingRequests": "Pending leave requests",
+  "dash.manage": "Manage", "dash.noGoals": "No goals yet", "dash.noGoalsHint": "Create your first company goal.",
+  "dash.noPending": "No pending requests", "dash.noPendingHint": "Time-off requests will show up here.",
+  "dash.upcomingHolidays": "Upcoming holidays", "dash.noHolidays": "No upcoming holidays.",
+  "dash.your1on1s": "Your upcoming 1:1s", "dash.no1on1s": "No 1:1s scheduled.",
+  "dash.recentFeedback": "Recent feedback", "dash.noFeedback": "No public feedback yet.",
+  "dash.teamSnapshot": "Team snapshot", "dash.review": "Review", "dash.allCaught": "All caught up",
+  "dash.awaiting": "Awaiting approval", "dash.noCycle": "No active cycle", "dash.totalInvited": "{total} total · {invited} invited",
+  "dash.goalsTracked": "{n} goals tracked",
+
+  // page titles & shared module bits
+  "people.title": "People", "people.subtitle": "{n} people across {teams} teams", "people.add": "Add person",
+  "people.directory": "Directory", "people.orgchart": "Org chart",
+  "teams.title": "Teams", "teams.subtitle": "{teams} teams · {n} people", "teams.new": "New team",
+  "leave.title": "Leave", "leave.subtitle": "Request time off, track balances, and see who's away.", "leave.request": "Request time off",
+  "reviews.title": "Reviews", "reviews.subtitle": "Run performance cycles across your company.", "reviews.newCycle": "New cycle",
+  "feedback.title": "Feedback", "feedback.subtitle": "Continuous, lightweight feedback — praise, growth, and requests.",
+  "feedback.give": "Give feedback", "feedback.request": "Request",
+  "goals.title": "Goals", "goals.subtitle": "Company, team, and individual goals — visible and connected.", "goals.new": "New goal",
+  "o1.title": "1:1s", "o1.subtitle": "Recurring conversations, shared notes, and action items that carry over.", "o1.new": "New 1:1",
+  "cal.title": "Calendar", "cal.subtitle": "Holidays, time off, and 1:1s across the company.",
+  "cal.today": "Today", "cal.holiday": "Holiday", "cal.timeoff": "Time off", "cal.oneonone": "1:1",
+  "set.title": "Settings", "set.subtitle": "Configure your workspace.",
+
+  // settings panels
+  "set.tab.company": "Company", "set.tab.roles": "Roles", "set.tab.leave": "Leave policies", "set.tab.holidays": "Holidays",
+  "set.tab.reviews": "Reviews", "set.tab.feedback": "Feedback", "set.tab.goals": "Goals", "set.tab.billing": "Billing",
+  "set.tab.integrations": "Integrations", "set.tab.appearance": "Appearance",
+  "set.companyProfile": "Company profile", "set.companyName": "Company name", "set.country": "Country",
+  "set.workWeek": "Work week", "set.accentColor": "Accent color",
+  "set.appearanceTitle": "Appearance & language", "set.appearanceHint": "Personal preferences — saved on this device.",
+  "set.theme": "Theme", "set.language": "Language", "set.languageHint": "Applies across the whole app and the marketing site.",
+
+  // admin
+  "admin.operator": "Operator", "admin.entities": "Entities", "admin.changelog": "Changelog",
+  "admin.site": "Site", "admin.entitiesSub": "Every company you've onboarded onto Keel.", "admin.newEntity": "New entity",
+
+  // enums (shared across modules)
+  "st.ACTIVE": "Active", "st.INVITED": "Invited", "st.OFFBOARDING": "Offboarding", "st.INACTIVE": "Inactive",
+  "lt.VACATION": "Vacation", "lt.SICK": "Sick leave", "lt.PARENTAL": "Parental leave", "lt.UNPAID": "Unpaid leave", "lt.CUSTOM": "Custom",
+  "gs.ON_TRACK": "On track", "gs.AT_RISK": "At risk", "gs.OFF_TRACK": "Off track", "gs.DONE": "Done", "gs.NOT_STARTED": "Not started",
+  "gl.COMPANY": "Company", "gl.TEAM": "Team", "gl.INDIVIDUAL": "Individual",
+  "cy.DRAFT": "Draft", "cy.ACTIVE": "Active", "cy.CLOSED": "Closed", "cy.RELEASED": "Released",
+  "tag.Strength": "Strength", "tag.Improvement": "Improvement", "tag.Collaboration": "Collaboration",
+  "tag.Leadership": "Leadership", "tag.Execution": "Execution", "tag.Culture": "Culture"
+};
+export default en;

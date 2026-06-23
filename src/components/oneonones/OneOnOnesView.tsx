@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { PageHeader } from "@/components/PageHeader";
 import { Card, Avatar, Badge, Button, Input, Label, Select, Textarea, cn } from "@/components/ui";
+import { useT } from "@/i18n/I18nProvider";
 import { Dialog } from "@/components/Dialog";
 import { Icon } from "@/components/icons";
 import { createOneOnOne, addNote, toggleAction } from "@/app/actions/oneonones";
@@ -14,20 +15,21 @@ type O = { id: string; otherName: string; otherImage: string | null; otherId: st
 
 export function OneOnOnesView({ items, people }: { items: O[]; people: { id: string; name: string }[] }) {
   const [active, setActive] = useState(items[0]?.id ?? "");
+  const t = useT();
   const cur = items.find((o) => o.id === active);
   return (
     <div>
-      <PageHeader title="1:1s" subtitle="Recurring conversations, shared notes, and action items that carry over."
-        action={<Dialog title="New 1:1" trigger={<><Icon.plus size={16} /> New 1:1</>}>{(close) => <NewOneOnOne people={people} close={close} />}</Dialog>} />
-      {items.length === 0 ? <Card className="p-10 text-center text-[13px] text-graphite-500">No 1:1s yet. Start one with a teammate.</Card> : (
+      <PageHeader title={t("o1.title")} subtitle={t("o1.subtitle")}
+        action={<Dialog title="New 1:1" trigger={<><Icon.plus size={16} /> {t("o1.new")}</>}>{(close) => <NewOneOnOne people={people} close={close} />}</Dialog>} />
+      {items.length === 0 ? <Card className="p-10 text-center text-[13px] text-ink-soft">No 1:1s yet. Start one with a teammate.</Card> : (
         <div className="grid lg:grid-cols-3 gap-5">
           <div className="space-y-2">
             {items.map((o) => (
-              <button key={o.id} onClick={() => setActive(o.id)} className={cn("w-full text-left rounded-xl border p-3 transition", active === o.id ? "border-accent-100 bg-accent-50/40" : "border-graphite-200 bg-white hover:bg-graphite-50")}>
+              <button key={o.id} onClick={() => setActive(o.id)} className={cn("w-full text-left rounded-xl border p-3 transition", active === o.id ? "border-accent-100 bg-accent-soft" : "border-line bg-surface hover:bg-surface-2")}>
                 <div className="flex items-center gap-2.5">
                   <Avatar name={o.otherName} src={o.otherImage} size={34} />
-                  <div className="flex-1 min-w-0"><p className="text-[13.5px] font-medium text-navy">{o.otherName}</p><p className="text-[12px] text-graphite-500">{o.cadence} · {o.role === "manager" ? "your report" : "your manager"}</p></div>
-                  {o.nextAt && <span className="text-[11px] text-graphite-400">{fmtDate(o.nextAt, { month: "short", day: "numeric" })}</span>}
+                  <div className="flex-1 min-w-0"><p className="text-[13.5px] font-medium text-ink">{o.otherName}</p><p className="text-[12px] text-ink-soft">{o.cadence} · {o.role === "manager" ? "your report" : "your manager"}</p></div>
+                  {o.nextAt && <span className="text-[11px] text-ink-faint">{fmtDate(o.nextAt, { month: "short", day: "numeric" })}</span>}
                 </div>
               </button>
             ))}
@@ -36,11 +38,11 @@ export function OneOnOnesView({ items, people }: { items: O[]; people: { id: str
             <div className="lg:col-span-2 space-y-4">
               <Card className="p-5">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3"><Avatar name={cur.otherName} src={cur.otherImage} size={40} /><div><p className="font-semibold text-navy">{cur.otherName}</p><p className="text-[12px] text-graphite-500">{cur.cadence}{cur.nextAt ? ` · next ${fmtDate(cur.nextAt)}` : ""}</p></div></div>
+                  <div className="flex items-center gap-3"><Avatar name={cur.otherName} src={cur.otherImage} size={40} /><div><p className="font-semibold text-ink">{cur.otherName}</p><p className="text-[12px] text-ink-soft">{cur.cadence}{cur.nextAt ? ` · next ${fmtDate(cur.nextAt)}` : ""}</p></div></div>
                   <Dialog wide title="Add meeting notes" trigger={<><Icon.plus size={15} /> Add notes</>} triggerSize="sm">{(close) => <NoteForm oneOnOneId={cur.id} close={close} />}</Dialog>
                 </div>
               </Card>
-              {cur.notes.length === 0 ? <Card className="p-8 text-center text-[13px] text-graphite-500">No notes yet. Add your first meeting.</Card> :
+              {cur.notes.length === 0 ? <Card className="p-8 text-center text-[13px] text-ink-soft">No notes yet. Add your first meeting.</Card> :
                 cur.notes.map((n) => <NoteCard key={n.id} n={n} />)}
             </div>
           )}
@@ -54,17 +56,17 @@ function NoteCard({ n }: { n: Note }) {
   const router = useRouter();
   return (
     <Card className="p-5">
-      <p className="text-[12px] font-medium text-graphite-500 uppercase tracking-wide">{fmtDate(n.meetingDate)}</p>
-      {n.agenda && <div className="mt-2"><p className="text-[12px] text-graphite-400">Agenda</p><p className="text-[13.5px] text-graphite-700">{n.agenda}</p></div>}
-      {n.sharedNotes && <div className="mt-2.5"><p className="text-[12px] text-graphite-400">Shared notes</p><p className="text-[13.5px] text-graphite-700 whitespace-pre-wrap">{n.sharedNotes}</p></div>}
-      {n.canSeePrivate && n.privateNotes && <div className="mt-2.5 rounded-lg bg-graphite-50 border border-graphite-200 p-2.5"><p className="text-[12px] text-graphite-400">Private notes · only you</p><p className="text-[13px] text-graphite-700 whitespace-pre-wrap">{n.privateNotes}</p></div>}
+      <p className="text-[12px] font-medium text-ink-soft uppercase tracking-wide">{fmtDate(n.meetingDate)}</p>
+      {n.agenda && <div className="mt-2"><p className="text-[12px] text-ink-faint">Agenda</p><p className="text-[13.5px] text-ink-muted">{n.agenda}</p></div>}
+      {n.sharedNotes && <div className="mt-2.5"><p className="text-[12px] text-ink-faint">Shared notes</p><p className="text-[13.5px] text-ink-muted whitespace-pre-wrap">{n.sharedNotes}</p></div>}
+      {n.canSeePrivate && n.privateNotes && <div className="mt-2.5 rounded-lg bg-surface-2 border border-line p-2.5"><p className="text-[12px] text-ink-faint">Private notes · only you</p><p className="text-[13px] text-ink-muted whitespace-pre-wrap">{n.privateNotes}</p></div>}
       {n.actionItems.length > 0 && (
-        <div className="mt-3"><p className="text-[12px] text-graphite-400 mb-1.5">Action items</p>
+        <div className="mt-3"><p className="text-[12px] text-ink-faint mb-1.5">Action items</p>
           <div className="space-y-1.5">
             {n.actionItems.map((a, i) => (
               <button key={i} onClick={async () => { await toggleAction(n.id, i); router.refresh(); }} className="flex items-center gap-2 text-left w-full">
                 <span className={cn("h-4 w-4 rounded border grid place-items-center", a.done ? "bg-good border-good" : "border-graphite-300")}>{a.done && <Icon.check size={11} className="text-white" />}</span>
-                <span className={cn("text-[13px]", a.done ? "text-graphite-400 line-through" : "text-graphite-700")}>{a.text}</span>
+                <span className={cn("text-[13px]", a.done ? "text-ink-faint line-through" : "text-ink-muted")}>{a.text}</span>
               </button>
             ))}
           </div>
@@ -112,7 +114,7 @@ function NoteForm({ oneOnOneId, close }: { oneOnOneId: string; close: () => void
     <form onSubmit={submit} className="space-y-4">
       <div><Label>Agenda</Label><Input value={agenda} onChange={(e) => setAgenda(e.target.value)} placeholder="Topics for today…" /></div>
       <div><Label>Shared notes</Label><Textarea value={sharedNotes} onChange={(e) => setSharedNotes(e.target.value)} placeholder="Visible to both of you" /></div>
-      <div><Label>Private notes <span className="text-graphite-400 font-normal">· only you</span></Label><Textarea value={privateNotes} onChange={(e) => setPrivateNotes(e.target.value)} placeholder="Just for you" /></div>
+      <div><Label>Private notes <span className="text-ink-faint font-normal">· only you</span></Label><Textarea value={privateNotes} onChange={(e) => setPrivateNotes(e.target.value)} placeholder="Just for you" /></div>
       <div>
         <Label>Action items</Label>
         <div className="space-y-2">

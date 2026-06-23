@@ -21,8 +21,8 @@ export default async function AdminHome() {
     <div>
       <div className="flex items-start justify-between mb-6">
         <div>
-          <h1 className="text-[22px] font-semibold tracking-tight text-navy">Entities</h1>
-          <p className="text-[13px] text-graphite-500 mt-0.5">Every company you've onboarded onto Keel.</p>
+          <h1 className="text-[22px] font-semibold tracking-tight text-ink">Entities</h1>
+          <p className="text-[13px] text-ink-soft mt-0.5">Every company you've onboarded onto Keel.</p>
         </div>
         <CreateEntityButton />
       </div>
@@ -36,7 +36,7 @@ export default async function AdminHome() {
       <Card className="overflow-hidden">
         <table className="w-full text-sm">
           <thead>
-            <tr className="text-left text-[12px] text-graphite-500 border-b border-graphite-200">
+            <tr className="text-left text-[12px] text-ink-soft border-b border-line">
               <th className="font-medium py-2.5 px-4">Company</th>
               <th className="font-medium py-2.5 px-3 hidden sm:table-cell">Address</th>
               <th className="font-medium py-2.5 px-3">People</th>
@@ -46,17 +46,17 @@ export default async function AdminHome() {
           </thead>
           <tbody>
             {companies.map((c) => (
-              <tr key={c.id} className="border-b border-graphite-100 last:border-0 hover:bg-graphite-50/60">
+              <tr key={c.id} className="border-b border-line-2 last:border-0 hover:bg-surface-2/60">
                 <td className="py-2.5 px-4">
-                  <Link href={`/admin/${c.id}`} className="font-medium text-navy hover:text-accent">{c.name}</Link>
-                  <p className="text-[12px] text-graphite-500">{c.country} · created {fmtDate(c.createdAt)}</p>
+                  <Link href={`/admin/${c.id}`} className="font-medium text-ink hover:text-accent">{c.name}</Link>
+                  <p className="text-[12px] text-ink-soft">{c.country} · created {fmtDate(c.createdAt)}</p>
                 </td>
-                <td className="py-2.5 px-3 hidden sm:table-cell text-graphite-600">{APP_DOMAIN}/<span className="font-medium text-navy">{c.slug}</span></td>
-                <td className="py-2.5 px-3 text-graphite-600">{c._count.employees}</td>
+                <td className="py-2.5 px-3 hidden sm:table-cell text-ink-muted">{APP_DOMAIN}/<span className="font-medium text-ink">{c.slug}</span></td>
+                <td className="py-2.5 px-3 text-ink-muted">{c._count.employees}</td>
                 <td className="py-2.5 px-3"><Badge tone={statusTone(c.status)}>{c.status[0].toUpperCase() + c.status.slice(1)}</Badge></td>
                 <td className="py-2.5 px-3">
                   <div className="flex items-center gap-2 justify-end">
-                    <Link href={`/admin/${c.id}`} className="text-[13px] text-graphite-600 hover:text-navy">Manage</Link>
+                    <Link href={`/admin/${c.id}`} className="text-[13px] text-ink-muted hover:text-ink">Manage</Link>
                     <Link href={`/${c.slug}`} className="inline-flex items-center gap-1 text-[13px] font-medium text-accent hover:underline">Open <Icon.arrowRight size={13} /></Link>
                   </div>
                 </td>
@@ -64,7 +64,7 @@ export default async function AdminHome() {
             ))}
           </tbody>
         </table>
-        {companies.length === 0 && <p className="text-center text-[13px] text-graphite-500 py-10">No entities yet. Create your first one.</p>}
+        {companies.length === 0 && <p className="text-center text-[13px] text-ink-soft py-10">No entities yet. Create your first one.</p>}
       </Card>
     </div>
   );
