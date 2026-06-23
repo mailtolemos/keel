@@ -55,7 +55,7 @@ export function LeaveView({ balance, allowance, myRequests, pending, holidays, u
                   <div key={r.id} className="flex items-center gap-3 py-2.5">
                     <div className="h-8 w-8 rounded-lg bg-accent-soft grid place-items-center"><Icon.leave size={16} className="text-ink" /></div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-[13.5px] font-medium text-ink">{LEAVE_TYPE_LABEL[r.type]} · {r.days}d</p>
+                      <p className="text-[13.5px] font-medium text-ink">{t("lt." + r.type)} · {r.days}d</p>
                       <p className="text-[12px] text-ink-soft">{fmt(r.startDate)}–{fmt(r.endDate)}{r.reason ? ` · ${r.reason}` : ""}</p>
                     </div>
                     <Badge tone={statusTone(r.status)}>{r.status[0] + r.status.slice(1).toLowerCase()}</Badge>
@@ -87,7 +87,7 @@ export function LeaveView({ balance, allowance, myRequests, pending, holidays, u
                 upcoming.map((u) => (
                   <div key={u.id} className="flex items-center gap-2.5">
                     <Avatar name={u.name} src={u.image} size={28} />
-                    <div className="flex-1"><p className="text-[13px] font-medium text-ink">{u.name}</p><p className="text-[12px] text-ink-soft">{LEAVE_TYPE_LABEL[u.type]} · {fmt(u.startDate)}–{fmt(u.endDate)}</p></div>
+                    <div className="flex-1"><p className="text-[13px] font-medium text-ink">{u.name}</p><p className="text-[12px] text-ink-soft">{t("lt." + u.type)} · {fmt(u.startDate)}–{fmt(u.endDate)}</p></div>
                   </div>
                 ))}
             </div>
@@ -124,6 +124,7 @@ function RequestForm({ close }: { close: () => void }) {
 }
 
 function ApprovalRow({ r }: { r: Req }) {
+  const t = useT();
   const router = useRouter();
   const [busy, setBusy] = useState(false);
   async function decide(approve: boolean) { setBusy(true); await decideLeave(r.id, approve); setBusy(false); router.refresh(); }
@@ -132,7 +133,7 @@ function ApprovalRow({ r }: { r: Req }) {
       <Avatar name={r.employeeName} src={r.employeeImage} size={32} />
       <div className="flex-1 min-w-0">
         <p className="text-[13.5px] font-medium text-ink">{r.employeeName}</p>
-        <p className="text-[12px] text-ink-soft">{LEAVE_TYPE_LABEL[r.type]} · {fmt(r.startDate)}–{fmt(r.endDate)} · {r.days}d{r.reason ? ` · ${r.reason}` : ""}</p>
+        <p className="text-[12px] text-ink-soft">{t("lt." + r.type)} · {fmt(r.startDate)}–{fmt(r.endDate)} · {r.days}d{r.reason ? ` · ${r.reason}` : ""}</p>
       </div>
       <Button size="sm" variant="secondary" onClick={() => decide(false)} disabled={busy}>Decline</Button>
       <Button size="sm" variant="primary" onClick={() => decide(true)} disabled={busy}>Approve</Button>

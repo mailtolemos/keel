@@ -42,11 +42,11 @@ export function SettingsView({ company, policies, holidays, counts, canManage }:
           {tab === "Roles" && <RolesPanel counts={counts} />}
           {tab === "Leave policies" && <PoliciesPanel policies={policies} canManage={canManage} />}
           {tab === "Holidays" && <HolidaysPanel holidays={holidays} canManage={canManage} />}
-          {tab === "Reviews" && <InfoPanel title="Review templates" body="Question sets and rating scales are configured when you create a review cycle. Saved templates are coming soon." badges={["Self review", "Manager review", "Peer review", "1–5 ratings"]} />}
-          {tab === "Feedback" && <InfoPanel title="Feedback settings" body="Feedback is continuous and lightweight. Visibility can be public, manager-only, or private on each note." badges={["Strength", "Improvement", "Collaboration", "Leadership", "Execution", "Culture"]} />}
-          {tab === "Goals" && <InfoPanel title="Goal settings" body="Goals can be set at the company, team, or individual level, each with progress tracking and updates." badges={["Company", "Team", "Individual"]} />}
-          {tab === "Billing" && <InfoPanel title="Billing" body="You're on the Keel demo plan. Billing and plan management will appear here." badges={["Demo plan"]} />}
-          {tab === "Integrations" && <InfoPanel title="Integrations" body="Connect Slack, Google Workspace, and your HRIS. Integrations are placeholders in this preview." badges={["Slack", "Google", "HRIS", "Calendar"]} />}
+          {tab === "Reviews" && <InfoPanel title={t("set.reviewsTitle")} body={t("set.reviewsBody")} badges={["Self review", "Manager review", "Peer review", "1–5"]} />}
+          {tab === "Feedback" && <InfoPanel title={t("set.feedbackTitle")} body={t("set.feedbackBody")} badges={[t("tag.Strength"), t("tag.Improvement"), t("tag.Collaboration"), t("tag.Leadership"), t("tag.Execution"), t("tag.Culture")]} />}
+          {tab === "Goals" && <InfoPanel title={t("set.goalsTitle")} body={t("set.goalsBody")} badges={[t("gl.COMPANY"), t("gl.TEAM"), t("gl.INDIVIDUAL")]} />}
+          {tab === "Billing" && <InfoPanel title={t("set.billingTitle")} body={t("set.billingBody")} badges={[t("set.demoPlan")]} />}
+          {tab === "Integrations" && <InfoPanel title={t("set.integrationsTitle")} body={t("set.integrationsBody")} badges={["Slack", "Google", "HRIS", "Calendar"]} />}
         </div>
       </div>
     </div>
@@ -54,41 +54,43 @@ export function SettingsView({ company, policies, holidays, counts, canManage }:
 }
 
 function CompanyPanel({ company, canManage }: { company: { name: string; country: string; workWeek: string; accentColor: string }; canManage: boolean }) {
+  const t = useT();
   const router = useRouter();
   const [f, setF] = useState(company);
   const [saved, setSaved] = useState(false); const [busy, setBusy] = useState(false);
   async function save() { setBusy(true); await updateCompany(f); setBusy(false); setSaved(true); router.refresh(); setTimeout(() => setSaved(false), 2000); }
   return (
     <Card className="p-5 max-w-xl">
-      <h2 className="text-sm font-semibold text-ink mb-4">Company profile</h2>
+      <h2 className="text-sm font-semibold text-ink mb-4">{t("set.companyProfile")}</h2>
       <div className="space-y-4">
-        <div><Label>Company name</Label><Input value={f.name} onChange={(e) => setF({ ...f, name: e.target.value })} disabled={!canManage} /></div>
+        <div><Label>{t("set.companyName")}</Label><Input value={f.name} onChange={(e) => setF({ ...f, name: e.target.value })} disabled={!canManage} /></div>
         <div className="grid grid-cols-2 gap-3">
-          <div><Label>Country</Label><Input value={f.country} onChange={(e) => setF({ ...f, country: e.target.value })} disabled={!canManage} /></div>
-          <div><Label>Work week</Label><Input value={f.workWeek} onChange={(e) => setF({ ...f, workWeek: e.target.value })} disabled={!canManage} /></div>
+          <div><Label>{t("set.country")}</Label><Input value={f.country} onChange={(e) => setF({ ...f, country: e.target.value })} disabled={!canManage} /></div>
+          <div><Label>{t("set.workWeek")}</Label><Input value={f.workWeek} onChange={(e) => setF({ ...f, workWeek: e.target.value })} disabled={!canManage} /></div>
         </div>
-        <div><Label>Accent color</Label><div className="flex items-center gap-2"><input type="color" value={f.accentColor} onChange={(e) => setF({ ...f, accentColor: e.target.value })} disabled={!canManage} className="h-9 w-12 rounded border border-line" /><Input value={f.accentColor} onChange={(e) => setF({ ...f, accentColor: e.target.value })} disabled={!canManage} className="w-32" /></div></div>
+        <div><Label>{t("set.accentColor")}</Label><div className="flex items-center gap-2"><input type="color" value={f.accentColor} onChange={(e) => setF({ ...f, accentColor: e.target.value })} disabled={!canManage} className="h-9 w-12 rounded border border-line" /><Input value={f.accentColor} onChange={(e) => setF({ ...f, accentColor: e.target.value })} disabled={!canManage} className="w-32" /></div></div>
       </div>
-      {canManage && <div className="mt-5 flex items-center gap-3"><Button onClick={save} disabled={busy}>{busy ? "Saving…" : "Save changes"}</Button>{saved && <span className="text-[13px] text-good">Saved</span>}</div>}
+      {canManage && <div className="mt-5 flex items-center gap-3"><Button onClick={save} disabled={busy}>{busy ? t("common.saving") : t("common.save")}</Button>{saved && <span className="text-[13px] text-good">{t("common.saved")}</span>}</div>}
     </Card>
   );
 }
 
 function RolesPanel({ counts }: { counts: { admins: number; managers: number; employees: number } }) {
+  const t = useT();
   const rows = [
-    ["Admin", counts.admins, "Full access to settings, people, billing, and all data."],
-    ["Manager", counts.managers, "Manage their team, approve leave, write reviews, see manager-only feedback."],
-    ["Employee", counts.employees, "Manage their own profile, requests, goals, feedback, and reviews."]
+    ["role.admin", counts.admins, "set.roleAdminDesc"],
+    ["role.manager", counts.managers, "set.roleManagerDesc"],
+    ["role.employee", counts.employees, "set.roleEmployeeDesc"]
   ] as const;
   return (
     <Card className="p-5 max-w-2xl">
-      <h2 className="text-sm font-semibold text-ink mb-4">Roles & permissions</h2>
+      <h2 className="text-sm font-semibold text-ink mb-4">{t("set.rolesPerms")}</h2>
       <div className="space-y-3">
         {rows.map(([role, n, desc]) => (
           <div key={role} className="flex items-start gap-3 rounded-lg border border-line p-3.5">
-            <Badge tone="navy">{role}</Badge>
-            <div className="flex-1"><p className="text-[13px] text-ink-muted">{desc}</p></div>
-            <span className="text-[13px] text-ink-soft">{n} {n === 1 ? "person" : "people"}</span>
+            <Badge tone="navy">{t(role)}</Badge>
+            <div className="flex-1"><p className="text-[13px] text-ink-muted">{t(desc)}</p></div>
+            <span className="text-[13px] text-ink-soft">{n} {n === 1 ? t("common.person") : t("common.people")}</span>
           </div>
         ))}
       </div>
@@ -97,9 +99,10 @@ function RolesPanel({ counts }: { counts: { admins: number; managers: number; em
 }
 
 function PoliciesPanel({ policies, canManage }: { policies: { id: string; name: string; type: string; allowanceDays: number; paid: boolean }[]; canManage: boolean }) {
+  const tt = useT();
   return (
     <Card className="p-5 max-w-2xl">
-      <h2 className="text-sm font-semibold text-ink mb-4">Leave policies</h2>
+      <h2 className="text-sm font-semibold text-ink mb-4">{tt("set.tab.leave")}</h2>
       <div className="space-y-2.5">
         {policies.map((p) => <PolicyRow key={p.id} p={p} canManage={canManage} />)}
       </div>
@@ -107,42 +110,44 @@ function PoliciesPanel({ policies, canManage }: { policies: { id: string; name: 
   );
 }
 function PolicyRow({ p, canManage }: { p: { id: string; name: string; type: string; allowanceDays: number; paid: boolean }; canManage: boolean }) {
+  const t = useT();
   const router = useRouter();
   const [days, setDays] = useState(p.allowanceDays); const [busy, setBusy] = useState(false);
   async function save() { setBusy(true); await updateLeavePolicy(p.id, Number(days)); setBusy(false); router.refresh(); }
   return (
     <div className="flex items-center gap-3 rounded-lg border border-line p-3">
-      <div className="flex-1"><p className="text-[13.5px] font-medium text-ink">{LEAVE_TYPE_LABEL[p.type] ?? p.name}</p><p className="text-[12px] text-ink-soft">{p.paid ? "Paid" : "Unpaid"}</p></div>
+      <div className="flex-1"><p className="text-[13.5px] font-medium text-ink">{t("lt." + p.type)}</p><p className="text-[12px] text-ink-soft">{p.paid ? t("set.paid") : t("set.unpaid")}</p></div>
       <Input type="number" value={days} onChange={(e) => setDays(Number(e.target.value))} disabled={!canManage} className="w-20" />
-      <span className="text-[13px] text-ink-soft">days / yr</span>
-      {canManage && <Button size="sm" variant="secondary" onClick={save} disabled={busy}>Save</Button>}
+      <span className="text-[13px] text-ink-soft">{t("set.daysYr")}</span>
+      {canManage && <Button size="sm" variant="secondary" onClick={save} disabled={busy}>{t("common.save")}</Button>}
     </div>
   );
 }
 
 function HolidaysPanel({ holidays, canManage }: { holidays: { id: string; name: string; date: string; calendar: string }[]; canManage: boolean }) {
+  const t = useT();
   const router = useRouter();
   const [name, setName] = useState(""); const [date, setDate] = useState(""); const [busy, setBusy] = useState(false);
   async function add() { if (!name || !date) return; setBusy(true); await addHoliday({ name, date, calendar: "Company" }); setBusy(false); setName(""); setDate(""); router.refresh(); }
   async function del(id: string) { setBusy(true); await removeHoliday(id); setBusy(false); router.refresh(); }
   return (
     <Card className="p-5 max-w-2xl">
-      <h2 className="text-sm font-semibold text-ink mb-4">Holiday calendar</h2>
+      <h2 className="text-sm font-semibold text-ink mb-4">{t("set.holidayCal")}</h2>
       {canManage && (
         <div className="flex items-end gap-2 mb-4">
-          <div className="flex-1"><Label>Holiday name</Label><Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Company offsite" /></div>
-          <div><Label>Date</Label><Input type="date" value={date} onChange={(e) => setDate(e.target.value)} /></div>
-          <Button onClick={add} disabled={busy}>Add</Button>
+          <div className="flex-1"><Label>{t("set.holidayName")}</Label><Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Company offsite" /></div>
+          <div><Label>{t("set.date")}</Label><Input type="date" value={date} onChange={(e) => setDate(e.target.value)} /></div>
+          <Button onClick={add} disabled={busy}>{t("common.add")}</Button>
         </div>
       )}
       <div className="space-y-1.5">
-        {holidays.length === 0 && <p className="text-[13px] text-ink-soft">No holidays yet.</p>}
+        {holidays.length === 0 && <p className="text-[13px] text-ink-soft">{t("set.noHolidays")}</p>}
         {holidays.map((h) => (
           <div key={h.id} className="flex items-center gap-3 rounded-lg border border-line px-3 py-2">
             <span className="text-[13.5px] font-medium text-ink flex-1">{h.name}</span>
             <Badge tone="neutral">{h.calendar}</Badge>
             <span className="text-[13px] text-ink-soft">{fmtDate(h.date)}</span>
-            {canManage && <button onClick={() => del(h.id)} className="text-[12px] text-bad hover:underline">Remove</button>}
+            {canManage && <button onClick={() => del(h.id)} className="text-[12px] text-bad hover:underline">{t("common.remove")}</button>}
           </div>
         ))}
       </div>

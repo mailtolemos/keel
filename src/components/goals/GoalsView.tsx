@@ -27,7 +27,7 @@ export function GoalsView({ goals, people, teams }: { goals: Goal[]; people: { i
 
       <div className="inline-flex rounded-lg border border-line bg-surface p-0.5 mb-4">
         {["all", "COMPANY", "TEAM", "INDIVIDUAL"].map((l) => (
-          <button key={l} onClick={() => setLevel(l)} className={cn("h-8 px-3.5 rounded-md text-[13px] font-medium transition", level === l ? "bg-navy text-white" : "text-ink-muted hover:text-ink")}>{l === "all" ? "All" : levelLabel[l]}</button>
+          <button key={l} onClick={() => setLevel(l)} className={cn("h-8 px-3.5 rounded-md text-[13px] font-medium transition", level === l ? "bg-navy text-white" : "text-ink-muted hover:text-ink")}>{l === "all" ? "All" : t("gl." + l)}</button>
         ))}
       </div>
 
@@ -40,12 +40,13 @@ export function GoalsView({ goals, people, teams }: { goals: Goal[]; people: { i
 }
 
 function GoalCard({ g }: { g: Goal }) {
+  const t = useT();
   return (
     <Card className="p-5">
       <div className="flex items-start justify-between gap-2">
         <div className="flex items-center gap-2">
-          <Badge tone={g.level === "COMPANY" ? "navy" : g.level === "TEAM" ? "accent" : "neutral"}>{levelLabel[g.level]}{g.team ? ` · ${g.team}` : ""}</Badge>
-          <Badge tone={goalTone(g.status)}>{GOAL_STATUS_LABEL[g.status]}</Badge>
+          <Badge tone={g.level === "COMPANY" ? "navy" : g.level === "TEAM" ? "accent" : "neutral"}>{t("gl." + g.level)}{g.team ? ` · ${g.team}` : ""}</Badge>
+          <Badge tone={goalTone(g.status)}>{t("gs." + g.status)}</Badge>
         </div>
         <Dialog wide title="Update goal" trigger="Update" triggerVariant="ghost" triggerSize="sm">{(close) => <UpdateForm g={g} close={close} />}</Dialog>
       </div>

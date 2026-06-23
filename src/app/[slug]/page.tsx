@@ -83,7 +83,7 @@ export default async function Dashboard({ params }: { params: { slug: string } }
                         <span className="text-[13.5px] font-medium text-ink truncate">{g.title}</span>
                       </div>
                       <div className="flex items-center gap-2 shrink-0">
-                        <Badge tone={goalTone(g.status)}>{GOAL_STATUS_LABEL[g.status]}</Badge>
+                        <Badge tone={goalTone(g.status)}>{t("gs." + g.status)}</Badge>
                         <span className="text-[12px] text-ink-soft w-9 text-right">{g.progress}%</span>
                       </div>
                     </div>
@@ -107,7 +107,7 @@ export default async function Dashboard({ params }: { params: { slug: string } }
                     <Avatar name={l.employee.name} src={l.employee.photo} size={30} />
                     <div className="min-w-0 flex-1">
                       <p className="text-[13.5px] font-medium text-ink truncate">{l.employee.name}</p>
-                      <p className="text-[12px] text-ink-soft">{LEAVE_TYPE_LABEL[l.type]} · {fmtDay(l.startDate)}–{fmtDay(l.endDate)} · {l.days}d</p>
+                      <p className="text-[12px] text-ink-soft">{t("lt." + l.type)} · {fmtDay(l.startDate)}–{fmtDay(l.endDate)} · {l.days}d</p>
                     </div>
                     {perms.isManager
                       ? <LinkButton href={`/${slug}/leave`} size="sm" variant="secondary">Review</LinkButton>

@@ -60,7 +60,7 @@ export function FeedbackView({ items, people, meId, slug }: { items: Item[]; peo
                     <Link href={`/${slug}/people/${f.authorId}`} className="font-medium text-ink hover:text-accent">{f.authorName}</Link>
                     <span className="text-ink-faint">{f.isRequest ? "requested feedback from" : "→"}</span>
                     <Link href={`/${slug}/people/${f.subjectId}`} className="font-medium text-ink hover:text-accent">{f.subjectName}</Link>
-                    <Badge tone={visMeta[f.visibility].tone}>{visMeta[f.visibility].label}</Badge>
+                    <Badge tone={visMeta[f.visibility].tone}>{t("vis." + f.visibility)}</Badge>
                     <span className="text-[12px] text-ink-faint ml-auto">{relativeTime(f.createdAt)}</span>
                   </div>
                   <p className="text-[13.5px] text-ink-muted mt-1.5 whitespace-pre-wrap">{f.body}</p>

@@ -52,12 +52,12 @@ export function PeopleDirectory({ people, teams, canManage, slug }: { people: Pe
               <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search…" className="h-9 w-48 rounded-lg border border-line bg-surface pl-8 pr-3 text-sm focus:outline-none focus:border-accent focus:shadow-focus" />
             </div>
             <select value={team} onChange={(e) => setTeam(e.target.value)} className="h-9 rounded-lg border border-line bg-surface px-2.5 text-[13px] text-ink-muted">
-              <option value="all">All teams</option>{teams.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
+              <option value="all">{t("people.allTeams")}</option>{teams.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
             </select>
             <select value={status} onChange={(e) => setStatus(e.target.value)} className="h-9 rounded-lg border border-line bg-surface px-2.5 text-[13px] text-ink-muted">
-              <option value="all">All statuses</option>{Object.entries(STATUS_META).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
+              <option value="all">{t("people.allStatuses")}</option>{Object.entries(STATUS_META).map(([k]) => <option key={k} value={k}>{t("st." + k)}</option>)}
             </select>
-            <span className="ml-auto text-[12px] text-ink-soft">{filtered.length} shown</span>
+            <span className="ml-auto text-[12px] text-ink-soft">{t("common.shown", { n: filtered.length })}</span>
           </>
         )}
       </div>
@@ -67,12 +67,12 @@ export function PeopleDirectory({ people, teams, canManage, slug }: { people: Pe
           <table className="w-full text-sm">
             <thead>
               <tr className="text-left text-[12px] text-ink-soft border-b border-line">
-                <th className="font-medium py-2.5 px-4">Name</th>
-                <th className="font-medium py-2.5 px-3 hidden sm:table-cell">Team</th>
-                <th className="font-medium py-2.5 px-3 hidden md:table-cell">Manager</th>
-                <th className="font-medium py-2.5 px-3 hidden lg:table-cell">Location</th>
-                <th className="font-medium py-2.5 px-3">Role</th>
-                <th className="font-medium py-2.5 px-3">Status</th>
+                <th className="font-medium py-2.5 px-4">{t("people.colName")}</th>
+                <th className="font-medium py-2.5 px-3 hidden sm:table-cell">{t("people.colTeam")}</th>
+                <th className="font-medium py-2.5 px-3 hidden md:table-cell">{t("people.colManager")}</th>
+                <th className="font-medium py-2.5 px-3 hidden lg:table-cell">{t("people.colLocation")}</th>
+                <th className="font-medium py-2.5 px-3">{t("people.colRole")}</th>
+                <th className="font-medium py-2.5 px-3">{t("people.colStatus")}</th>
               </tr>
             </thead>
             <tbody>
@@ -90,13 +90,13 @@ export function PeopleDirectory({ people, teams, canManage, slug }: { people: Pe
                   <td className="py-2.5 px-3 hidden sm:table-cell text-ink-muted">{p.team ?? "—"}</td>
                   <td className="py-2.5 px-3 hidden md:table-cell text-ink-muted">{p.manager ?? "—"}</td>
                   <td className="py-2.5 px-3 hidden lg:table-cell text-ink-muted">{p.location ?? "—"}</td>
-                  <td className="py-2.5 px-3 text-ink-muted">{ROLE_LABEL[p.role]}</td>
-                  <td className="py-2.5 px-3"><Badge tone={STATUS_META[p.status].tone}>{STATUS_META[p.status].label}</Badge></td>
+                  <td className="py-2.5 px-3 text-ink-muted">{t("role." + p.role.toLowerCase())}</td>
+                  <td className="py-2.5 px-3"><Badge tone={STATUS_META[p.status].tone}>{t("st." + p.status)}</Badge></td>
                 </tr>
               ))}
             </tbody>
           </table>
-          {filtered.length === 0 && <p className="text-center text-[13px] text-ink-soft py-10">No people match your filters.</p>}
+          {filtered.length === 0 && <p className="text-center text-[13px] text-ink-soft py-10">{t("people.noMatch")}</p>}
         </Card>
       ) : (
         <OrgChart people={people} slug={slug} />
