@@ -1,1 +1,2 @@
 export const APP_DOMAIN = "mykeel.org";
+export const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://www.mykeel.org";

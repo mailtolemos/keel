@@ -10,7 +10,7 @@ export async function createEntity(input: { name: string; country?: string; slug
   if (!z.string().min(1).safeParse(input.name).success) return { ok: false as const, error: "Company name is required." };
   const slug = await uniqueSlug(input.slug?.trim() || input.name);
   const company = await prisma.company.create({
-    data: { name: input.name.trim(), slug, country: input.country || "United States", workWeek: "Mon,Tue,Wed,Thu,Fri", status: "active" }
+    data: { name: input.name.trim(), slug, country: input.country || "United States", workWeek: "Mon,Tue,Wed,Thu,Fri", status: "active", trialEndsAt: new Date(Date.now() + 14 * 86400000) }
   });
   await prisma.leavePolicy.createMany({
     data: [

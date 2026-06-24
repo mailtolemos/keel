@@ -26,7 +26,7 @@ export async function createCompany(input: unknown) {
 
   const slug = await uniqueSlug(data.companyName);
   const company = await prisma.company.create({
-    data: { name: data.companyName.trim(), slug, country: data.country, workWeek: data.workWeek.join(",") }
+    data: { name: data.companyName.trim(), slug, country: data.country, workWeek: data.workWeek.join(","), trialEndsAt: new Date(Date.now() + 14 * 86400000) }
   });
 
   // Default leave policies

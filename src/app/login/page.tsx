@@ -39,6 +39,7 @@ export default function LoginPage() {
           <Label>{t("auth.password")}</Label>
           <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" autoComplete="current-password" required />
         </div>
+        <div className="flex justify-end -mt-1"><Link href="/forgot" className="text-[12px] text-accent hover:underline">{t("auth.forgotLink")}</Link></div>
         {error && <p className="text-[13px] text-bad">{error}</p>}
         <Button type="submit" variant="primary" className="w-full" disabled={loading}>{loading ? t("auth.signingIn") : t("auth.signIn")}</Button>
       </form>

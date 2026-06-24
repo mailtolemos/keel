@@ -5,6 +5,7 @@ import { PageHeader } from "@/components/PageHeader";
 import { Card, Badge, Button, Input, Label, Select, cn } from "@/components/ui";
 import { updateCompany, updateLeavePolicy, addHoliday, removeHoliday } from "@/app/actions/settings";
 import { fmtDate } from "@/lib/format";
+import { BillingPanel } from "./BillingPanel";
 import { useTheme } from "next-themes";
 import { Icon } from "@/components/icons";
 import { useT, useLocale } from "@/i18n/I18nProvider";
@@ -18,12 +19,14 @@ const TAB_KEY: Record<string, string> = {
   "Billing": "set.tab.billing", "Integrations": "set.tab.integrations"
 };
 
-export function SettingsView({ company, policies, holidays, counts, canManage }: {
+export function SettingsView({ company, policies, holidays, counts, canManage, slug, billing }: {
   company: { name: string; country: string; workWeek: string; accentColor: string };
   policies: { id: string; name: string; type: string; allowanceDays: number; paid: boolean }[];
   holidays: { id: string; name: string; date: string; calendar: string }[];
   counts: { admins: number; managers: number; employees: number };
   canManage: boolean;
+  slug: string;
+  billing: { status: string; trialDaysLeft: number | null; plan: string; stripeReady: boolean };
 }) {
   const [tab, setTab] = useState("Company");
   const t = useT();
@@ -45,7 +48,7 @@ export function SettingsView({ company, policies, holidays, counts, canManage }:
           {tab === "Reviews" && <InfoPanel title={t("set.reviewsTitle")} body={t("set.reviewsBody")} badges={["Self review", "Manager review", "Peer review", "1–5"]} />}
           {tab === "Feedback" && <InfoPanel title={t("set.feedbackTitle")} body={t("set.feedbackBody")} badges={[t("tag.Strength"), t("tag.Improvement"), t("tag.Collaboration"), t("tag.Leadership"), t("tag.Execution"), t("tag.Culture")]} />}
           {tab === "Goals" && <InfoPanel title={t("set.goalsTitle")} body={t("set.goalsBody")} badges={[t("gl.COMPANY"), t("gl.TEAM"), t("gl.INDIVIDUAL")]} />}
-          {tab === "Billing" && <InfoPanel title={t("set.billingTitle")} body={t("set.billingBody")} badges={[t("set.demoPlan")]} />}
+          {tab === "Billing" && <BillingPanel slug={slug} status={billing.status} trialDaysLeft={billing.trialDaysLeft} plan={billing.plan} stripeReady={billing.stripeReady} canManage={canManage} />}
           {tab === "Integrations" && <InfoPanel title={t("set.integrationsTitle")} body={t("set.integrationsBody")} badges={["Slack", "Google", "HRIS", "Calendar"]} />}
         </div>
       </div>

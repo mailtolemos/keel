@@ -1,5 +1,7 @@
 import { requireCompanyAccess, can } from "@/lib/session";
 import { prisma } from "@/lib/db";
+import { trialDaysLeft } from "@/lib/billing";
+import { stripeEnabled } from "@/lib/stripe";
 import { SettingsView } from "@/components/settings/SettingsView";
 
 export default async function SettingsPage({ params }: { params: { slug: string } }) {
@@ -18,6 +20,8 @@ export default async function SettingsPage({ params }: { params: { slug: string 
       holidays={holidays.map((h) => ({ id: h.id, name: h.name, date: h.date.toISOString(), calendar: h.calendar }))}
       counts={{ admins, managers, employees }}
       canManage={can(me.role).isAdmin}
+      slug={params.slug}
+      billing={{ status: company.subscriptionStatus, trialDaysLeft: trialDaysLeft(company), plan: company.plan, stripeReady: stripeEnabled }}
     />
   );
 }

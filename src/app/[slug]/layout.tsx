@@ -1,9 +1,14 @@
 import { requireCompanyAccess } from "@/lib/session";
+import { workspaceActive } from "@/lib/billing";
+import { Paywall } from "@/components/Paywall";
 import { Sidebar } from "@/components/Sidebar";
 import { Topbar } from "@/components/Topbar";
 
 export default async function AppLayout({ children, params }: { children: React.ReactNode; params: { slug: string } }) {
   const { me, company, user } = await requireCompanyAccess(params.slug);
+  if (!workspaceActive(company) && !user.isPlatformAdmin) {
+    return <Paywall slug={company.slug} companyName={company.name} canManage={me.role === "ADMIN"} />;
+  }
   return (
     <div className="flex min-h-screen bg-bg">
       <Sidebar company={company.name} slug={params.slug} />

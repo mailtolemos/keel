@@ -3,6 +3,8 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { requireEmployee, can } from "@/lib/session";
+import { sendEmail, emailLayout } from "@/lib/email";
+import { APP_URL } from "@/lib/constants";
 
 export async function invitePerson(input: { name: string; email: string; title?: string; role: string; teamId?: string; managerId?: string }) {
   const { company, me } = await requireEmployee();
@@ -19,12 +21,16 @@ export async function invitePerson(input: { name: string; email: string; title?:
       role: input.role, status: "INVITED", teamId: input.teamId || null, managerId: input.managerId || null
     }
   });
-  await prisma.invitation.create({
+  const invitation = await prisma.invitation.create({
     data: { companyId: company.id, email, name: input.name.trim(), role: input.role, title: input.title || null, teamId: input.teamId || null }
   });
+  const url = `${APP_URL}/join?token=${invitation.token}`;
+  const sent = await sendEmail({
+    to: email, subject: `You're invited to ${company.name} on Keel`,
+    html: emailLayout(`Join ${company.name} on Keel`, `${me.name} invited you to join <b>${company.name}</b>. Click below to set your password and get started.`, { label: "Accept invitation", url })
+  });
   revalidatePath("/", "layout");
-  revalidatePath("/", "layout");
-  return { ok: true as const };
+  return { ok: true as const, inviteLink: sent.ok ? undefined : url };
 }
 
 export async function updateEmployee(id: string, input: Record<string, string | null>) {
