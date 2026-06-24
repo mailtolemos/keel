@@ -117,7 +117,7 @@ const de: Record<string, string> = {
   "gl.COMPANY": "Unternehmen", "gl.TEAM": "Team", "gl.INDIVIDUAL": "Individuell",
   "cy.DRAFT": "Entwurf", "cy.ACTIVE": "Aktiv", "cy.CLOSED": "Geschlossen", "cy.RELEASED": "Veröffentlicht",
   "tag.Strength": "Stärke", "tag.Improvement": "Verbesserung", "tag.Collaboration": "Zusammenarbeit",
-  "tag.Leadership": "Führung", "tag.Execution": "Umsetzung", "tag.Culture": "Kultur"
+  "tag.Leadership": "Führung", "tag.Execution": "Umsetzung", "tag.Culture": "Kultur",
   "set.rolesPerms": "Rollen & Berechtigungen",
   "set.roleAdminDesc": "Voller Zugriff auf Einstellungen, Personen, Abrechnung und alle Daten.",
   "set.roleManagerDesc": "Eigenes Team verwalten, Abwesenheiten genehmigen, Beurteilungen schreiben, manager-interne Feedbacks sehen.",

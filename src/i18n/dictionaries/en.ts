@@ -128,7 +128,7 @@ const en: Record<string, string> = {
   "gl.COMPANY": "Company", "gl.TEAM": "Team", "gl.INDIVIDUAL": "Individual",
   "cy.DRAFT": "Draft", "cy.ACTIVE": "Active", "cy.CLOSED": "Closed", "cy.RELEASED": "Released",
   "tag.Strength": "Strength", "tag.Improvement": "Improvement", "tag.Collaboration": "Collaboration",
-  "tag.Leadership": "Leadership", "tag.Execution": "Execution", "tag.Culture": "Culture"
+  "tag.Leadership": "Leadership", "tag.Execution": "Execution", "tag.Culture": "Culture",
   "set.rolesPerms": "Roles & permissions",
   "set.roleAdminDesc": "Full access to settings, people, billing, and all data.",
   "set.roleManagerDesc": "Manage their team, approve leave, write reviews, see manager-only feedback.",

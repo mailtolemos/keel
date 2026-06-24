@@ -117,7 +117,7 @@ const it: Record<string, string> = {
   "gl.COMPANY": "Azienda", "gl.TEAM": "Team", "gl.INDIVIDUAL": "Individuale",
   "cy.DRAFT": "Bozza", "cy.ACTIVE": "Attivo", "cy.CLOSED": "Chiuso", "cy.RELEASED": "Pubblicato",
   "tag.Strength": "Punto di forza", "tag.Improvement": "Miglioramento", "tag.Collaboration": "Collaborazione",
-  "tag.Leadership": "Leadership", "tag.Execution": "Esecuzione", "tag.Culture": "Cultura"
+  "tag.Leadership": "Leadership", "tag.Execution": "Esecuzione", "tag.Culture": "Cultura",
   "set.rolesPerms": "Ruoli e permessi",
   "set.roleAdminDesc": "Accesso completo a impostazioni, persone, fatturazione e a tutti i dati.",
   "set.roleManagerDesc": "Gestire il proprio team, approvare i permessi, scrivere valutazioni, vedere i feedback riservati ai manager.",
