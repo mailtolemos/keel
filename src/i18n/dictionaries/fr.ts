@@ -178,7 +178,7 @@ const fr: Record<string, string> = {
   "join.accept": "Accepter et continuer",
   "join.accepting": "Adhésion…",
   "people.fullName": "Nom complet",
-  "people.title": "Intitulé",
+  "people.jobTitle": "Intitulé",
   "people.role": "Rôle",
   "people.team": "Équipe",
   "people.noTeam": "Aucune équipe",

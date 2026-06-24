@@ -189,7 +189,7 @@ const en: Record<string, string> = {
   "join.accept": "Accept & continue",
   "join.accepting": "Joining…",
   "people.fullName": "Full name",
-  "people.title": "Title",
+  "people.jobTitle": "Title",
   "people.role": "Role",
   "people.team": "Team",
   "people.noTeam": "No team",

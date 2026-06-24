@@ -44,7 +44,7 @@ export function AddPersonForm({ teams, close }: { teams: { id: string; name: str
         <div><Label>{t("people.fullName")}</Label><Input value={f.name} onChange={(e) => set("name", e.target.value)} placeholder="Jamie Fox" required /></div>
         <div><Label>{t("auth.workEmail")}</Label><Input type="email" value={f.email} onChange={(e) => set("email", e.target.value)} placeholder="jamie@company.com" required /></div>
       </div>
-      <div><Label>{t("people.title")}</Label><Input value={f.title} onChange={(e) => set("title", e.target.value)} placeholder="Product Designer" /></div>
+      <div><Label>{t("people.jobTitle")}</Label><Input value={f.title} onChange={(e) => set("title", e.target.value)} placeholder="Product Designer" /></div>
       <div className="grid grid-cols-2 gap-3">
         <div><Label>{t("people.role")}</Label><Select value={f.role} onChange={(e) => set("role", e.target.value)}><option value="EMPLOYEE">{t("role.employee")}</option><option value="MANAGER">{t("role.manager")}</option><option value="ADMIN">{t("role.admin")}</option></Select></div>
         <div><Label>{t("people.team")}</Label><Select value={f.teamId} onChange={(e) => set("teamId", e.target.value)}><option value="">{t("people.noTeam")}</option>{teams.map((tm) => <option key={tm.id} value={tm.id}>{tm.name}</option>)}</Select></div>
