@@ -6,16 +6,18 @@ import { Dialog } from "@/components/Dialog";
 import { Icon } from "@/components/icons";
 import { createChangelogEntry, updateChangelogEntry, deleteChangelogEntry } from "@/app/actions/admin";
 import { fmtDate } from "@/lib/format";
+import { useT } from "@/i18n/I18nProvider";
 
 type Entry = { id: string; title: string; category: string; summary: string; changes: string; date: string; published: boolean };
 const catTone = (c: string): "good" | "warn" | "bad" | "neutral" | "accent" | "navy" => (c === "Feature" ? "accent" : c === "Improvement" ? "navy" : "neutral");
 
 export function ChangelogManager({ entries }: { entries: Entry[] }) {
+  const t = useT();
   return (
     <div>
       <div className="flex items-center justify-between mb-5">
         <div><h1 className="text-[22px] font-semibold tracking-tight text-ink">Changelog</h1><p className="text-[13px] text-ink-soft mt-0.5">Updates here appear on the public homepage.</p></div>
-        <Dialog wide title="Post an update" trigger={<><Icon.plus size={16} /> New update</>}>{(close) => <EntryForm close={close} />}</Dialog>
+        <Dialog wide title={t("ad.postUpdate")} trigger={<><Icon.plus size={16} /> {t("ad.newUpdate")}</>}>{(close) => <EntryForm close={close} />}</Dialog>
       </div>
       <div className="space-y-3">
         {entries.length === 0 && <Card className="p-10 text-center text-[13px] text-ink-soft">No updates yet.</Card>}
@@ -26,14 +28,14 @@ export function ChangelogManager({ entries }: { entries: Entry[] }) {
                 <div className="flex items-center gap-2 flex-wrap">
                   <Badge tone={catTone(e.category)}>{e.category}</Badge>
                   <span className="font-semibold text-ink">{e.title}</span>
-                  {!e.published && <Badge tone="warn">Draft</Badge>}
+                  {!e.published && <Badge tone="warn">{t("ad.draft")}</Badge>}
                   <span className="text-[12px] text-ink-faint">{fmtDate(e.date)}</span>
                 </div>
                 <p className="text-[13px] text-ink-muted mt-1.5">{e.summary}</p>
                 {e.changes && <ul className="mt-2 space-y-1">{e.changes.split("\n").filter(Boolean).map((c, i) => <li key={i} className="text-[12.5px] text-ink-muted flex gap-1.5"><Icon.check size={13} className="text-accent mt-0.5 shrink-0" />{c}</li>)}</ul>}
               </div>
               <div className="flex items-center gap-1 shrink-0">
-                <Dialog wide title="Edit update" trigger="Edit" triggerVariant="ghost" triggerSize="sm">{(close) => <EntryForm close={close} entry={e} />}</Dialog>
+                <Dialog wide title={t("ad.editUpdate")} trigger={t("common.edit")} triggerVariant="ghost" triggerSize="sm">{(close) => <EntryForm close={close} entry={e} />}</Dialog>
                 <DeleteBtn id={e.id} />
               </div>
             </div>
@@ -45,12 +47,14 @@ export function ChangelogManager({ entries }: { entries: Entry[] }) {
 }
 
 function DeleteBtn({ id }: { id: string }) {
-  const router = useRouter(); const [busy, setBusy] = useState(false);
-  return <button onClick={async () => { setBusy(true); await deleteChangelogEntry(id); setBusy(false); router.refresh(); }} disabled={busy} className="h-8 px-2 rounded-lg text-[12px] text-bad hover:bg-red-50">Delete</button>;
+  const router = useRouter();
+  const t = useT(); const [busy, setBusy] = useState(false);
+  return <button onClick={async () => { setBusy(true); await deleteChangelogEntry(id); setBusy(false); router.refresh(); }} disabled={busy} className="h-8 px-2 rounded-lg text-[12px] text-bad hover:bg-red-50">{t("common.delete")}</button>;
 }
 
 function EntryForm({ close, entry }: { close: () => void; entry?: Entry }) {
   const router = useRouter();
+  const t = useT();
   const [f, setF] = useState({
     title: entry?.title ?? "", category: entry?.category ?? "Feature", summary: entry?.summary ?? "",
     changes: entry?.changes ?? "", date: entry ? entry.date.slice(0, 10) : new Date().toISOString().slice(0, 10),
@@ -68,17 +72,17 @@ function EntryForm({ close, entry }: { close: () => void; entry?: Entry }) {
   return (
     <form onSubmit={submit} className="space-y-4">
       <div className="grid grid-cols-3 gap-3">
-        <div className="col-span-2"><Label>Title</Label><Input value={f.title} onChange={(e) => set("title", e.target.value)} placeholder="Multi-workspace platform" required /></div>
-        <div><Label>Category</Label><Select value={f.category} onChange={(e) => set("category", e.target.value)}><option>Feature</option><option>Improvement</option><option>Fix</option></Select></div>
+        <div className="col-span-2"><Label>{t("gl2.titleField")}</Label><Input value={f.title} onChange={(e) => set("title", e.target.value)} placeholder="Multi-workspace platform" required /></div>
+        <div><Label>{t("ad.category")}</Label><Select value={f.category} onChange={(e) => set("category", e.target.value)}><option>Feature</option><option>Improvement</option><option>Fix</option></Select></div>
       </div>
-      <div><Label>Summary</Label><Textarea value={f.summary} onChange={(e) => set("summary", e.target.value)} placeholder="One or two sentences describing the update…" required /></div>
-      <div><Label>What changed (one bullet per line)</Label><Textarea value={f.changes} onChange={(e) => set("changes", e.target.value)} className="min-h-[100px]" placeholder={"Added X\nImproved Y\nFixed Z"} /></div>
+      <div><Label>{t("ad.summary")}</Label><Textarea value={f.summary} onChange={(e) => set("summary", e.target.value)} placeholder="One or two sentences describing the update…" required /></div>
+      <div><Label>{t("ad.whatChanged")}</Label><Textarea value={f.changes} onChange={(e) => set("changes", e.target.value)} className="min-h-[100px]" placeholder={"Added X\nImproved Y\nFixed Z"} /></div>
       <div className="grid grid-cols-2 gap-3 items-end">
-        <div><Label>Date</Label><Input type="date" value={f.date} onChange={(e) => set("date", e.target.value)} /></div>
-        <label className="flex items-center gap-2 h-9"><input type="checkbox" checked={f.published} onChange={(e) => set("published", e.target.checked)} className="accent-accent h-4 w-4" /><span className="text-[13px] text-ink-muted">Published (visible on homepage)</span></label>
+        <div><Label>{t("set.date")}</Label><Input type="date" value={f.date} onChange={(e) => set("date", e.target.value)} /></div>
+        <label className="flex items-center gap-2 h-9"><input type="checkbox" checked={f.published} onChange={(e) => set("published", e.target.checked)} className="accent-accent h-4 w-4" /><span className="text-[13px] text-ink-muted">{t("ad.published")}</span></label>
       </div>
       {error && <p className="text-[13px] text-bad">{error}</p>}
-      <div className="flex justify-end gap-2"><Button variant="secondary" onClick={close}>Cancel</Button><Button type="submit" disabled={busy}>{busy ? "Saving…" : entry ? "Save" : "Post update"}</Button></div>
+      <div className="flex justify-end gap-2"><Button variant="secondary" onClick={close}>{t("common.cancel")}</Button><Button type="submit" disabled={busy}>{busy ? t("common.saving") : entry ? t("common.save") : t("ad.post")}</Button></div>
     </form>
   );
 }

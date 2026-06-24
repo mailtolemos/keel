@@ -11,6 +11,8 @@ export const LOCALE_LABELS: Record<Locale, { label: string; flag: string; native
   pt: { label: "Portuguese", native: "Português", flag: "🇵🇹" }
 };
 
+export const INTL_LOCALE: Record<Locale, string> = { en: "en-GB", fr: "fr-FR", it: "it-IT", de: "de-DE", pt: "pt-PT" };
+
 export function isLocale(x: string | undefined | null): x is Locale {
   return !!x && (LOCALES as readonly string[]).includes(x);
 }

@@ -29,18 +29,18 @@ export function LeaveView({ balance, allowance, myRequests, pending, holidays, u
         action={<Dialog title="Request time off" trigger={<><Icon.plus size={16} /> {t("leave.request")}</>}>{(close) => <RequestForm close={close} />}</Dialog>} />
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
-        <Stat label="Vacation remaining" value={`${balance}d`} sub={`of ${allowance}d this year`} />
-        <Stat label="Used" value={`${used}d`} />
-        <Stat label="Pending" value={myRequests.filter((r) => r.status === "PENDING").length} sub="your requests" />
-        <Stat label="Out this month" value={upcoming.length} sub="across the company" />
+        <Stat label={t("lv.balance")} value={`${balance}d`} sub={t("lv.ofYear", { n: allowance })} />
+        <Stat label={t("lv.used")} value={`${used}d`} />
+        <Stat label={t("lv.pending")} value={myRequests.filter((r) => r.status === "PENDING").length} sub={t("lv.yourReqs")} />
+        <Stat label={t("lv.outMonth")} value={upcoming.length} sub={t("lv.acrossCompany")} />
       </div>
 
       <div className="grid lg:grid-cols-3 gap-5">
         <div className="lg:col-span-2 space-y-5">
           {canApprove && (
             <Card className="p-5">
-              <h2 className="text-sm font-semibold text-ink mb-3">Pending approvals</h2>
-              {pending.length === 0 ? <p className="text-[13px] text-ink-soft">Nothing awaiting your approval.</p> : (
+              <h2 className="text-sm font-semibold text-ink mb-3">{t("lv.pendingApprovals")}</h2>
+              {pending.length === 0 ? <p className="text-[13px] text-ink-soft">{t("lv.nothingAwaiting")}</p> : (
                 <div className="divide-y divide-line-2 -my-1">
                   {pending.map((r) => <ApprovalRow key={r.id} r={r} />)}
                 </div>
@@ -48,8 +48,8 @@ export function LeaveView({ balance, allowance, myRequests, pending, holidays, u
             </Card>
           )}
           <Card className="p-5">
-            <h2 className="text-sm font-semibold text-ink mb-3">Your requests</h2>
-            {myRequests.length === 0 ? <p className="text-[13px] text-ink-soft">No requests yet.</p> : (
+            <h2 className="text-sm font-semibold text-ink mb-3">{t("lv.yourRequests")}</h2>
+            {myRequests.length === 0 ? <p className="text-[13px] text-ink-soft">{t("lv.noRequests")}</p> : (
               <div className="divide-y divide-line-2 -my-1">
                 {myRequests.map((r) => (
                   <div key={r.id} className="flex items-center gap-3 py-2.5">
@@ -58,7 +58,7 @@ export function LeaveView({ balance, allowance, myRequests, pending, holidays, u
                       <p className="text-[13.5px] font-medium text-ink">{t("lt." + r.type)} · {r.days}d</p>
                       <p className="text-[12px] text-ink-soft">{fmt(r.startDate)}–{fmt(r.endDate)}{r.reason ? ` · ${r.reason}` : ""}</p>
                     </div>
-                    <Badge tone={statusTone(r.status)}>{r.status[0] + r.status.slice(1).toLowerCase()}</Badge>
+                    <Badge tone={statusTone(r.status)}>{t("ls." + r.status)}</Badge>
                     {r.status === "PENDING" && <CancelBtn id={r.id} />}
                   </div>
                 ))}
@@ -69,7 +69,7 @@ export function LeaveView({ balance, allowance, myRequests, pending, holidays, u
 
         <div className="space-y-5">
           <Card className="p-5">
-            <h2 className="text-sm font-semibold text-ink mb-3">Company holidays</h2>
+            <h2 className="text-sm font-semibold text-ink mb-3">{t("lv.companyHolidays")}</h2>
             <div className="space-y-2.5">
               {holidays.map((h) => (
                 <div key={h.id} className="flex items-center justify-between text-[13px]">
@@ -77,13 +77,13 @@ export function LeaveView({ balance, allowance, myRequests, pending, holidays, u
                   <span className="text-ink-soft">{fmt(h.date)}</span>
                 </div>
               ))}
-              {holidays.length === 0 && <p className="text-[13px] text-ink-soft">No holidays set.</p>}
+              {holidays.length === 0 && <p className="text-[13px] text-ink-soft">{t("lv.noHolidays")}</p>}
             </div>
           </Card>
           <Card className="p-5">
-            <h2 className="text-sm font-semibold text-ink mb-3">Who's away</h2>
+            <h2 className="text-sm font-semibold text-ink mb-3">{t("lv.whosAway")}</h2>
             <div className="space-y-3">
-              {upcoming.length === 0 ? <p className="text-[13px] text-ink-soft">Nobody's out right now.</p> :
+              {upcoming.length === 0 ? <p className="text-[13px] text-ink-soft">{t("lv.nobodyOut")}</p> :
                 upcoming.map((u) => (
                   <div key={u.id} className="flex items-center gap-2.5">
                     <Avatar name={u.name} src={u.image} size={28} />
@@ -111,14 +111,14 @@ function RequestForm({ close }: { close: () => void }) {
   }
   return (
     <form onSubmit={submit} className="space-y-4">
-      <div><Label>Leave type</Label><Select value={f.type} onChange={(e) => setF({ ...f, type: e.target.value })}>{Object.entries(LEAVE_TYPE_LABEL).map(([k, v]) => <option key={k} value={k}>{v}</option>)}</Select></div>
+      <div><Label>{t("lv.type")}</Label><Select value={f.type} onChange={(e) => setF({ ...f, type: e.target.value })}>{Object.keys(LEAVE_TYPE_LABEL).map((k) => <option key={k} value={k}>{t("lt." + k)}</option>)}</Select></div>
       <div className="grid grid-cols-2 gap-3">
-        <div><Label>Start date</Label><Input type="date" value={f.startDate} onChange={(e) => setF({ ...f, startDate: e.target.value })} required /></div>
-        <div><Label>End date</Label><Input type="date" value={f.endDate} onChange={(e) => setF({ ...f, endDate: e.target.value })} required /></div>
+        <div><Label>{t("lv.startDate")}</Label><Input type="date" value={f.startDate} onChange={(e) => setF({ ...f, startDate: e.target.value })} required /></div>
+        <div><Label>{t("lv.endDate")}</Label><Input type="date" value={f.endDate} onChange={(e) => setF({ ...f, endDate: e.target.value })} required /></div>
       </div>
-      <div><Label>Reason (optional)</Label><Textarea value={f.reason} onChange={(e) => setF({ ...f, reason: e.target.value })} placeholder="Family trip…" /></div>
+      <div><Label>{t("lv.reasonOpt")}</Label><Textarea value={f.reason} onChange={(e) => setF({ ...f, reason: e.target.value })} placeholder={t("lv.reasonPh")} /></div>
       {error && <p className="text-[13px] text-bad">{error}</p>}
-      <div className="flex justify-end gap-2"><Button variant="secondary" onClick={close}>Cancel</Button><Button type="submit" disabled={loading}>{loading ? "Submitting…" : "Submit request"}</Button></div>
+      <div className="flex justify-end gap-2"><Button variant="secondary" onClick={close}>{t("common.cancel")}</Button><Button type="submit" disabled={loading}>{loading ? t("lv.submitting") : t("lv.submit")}</Button></div>
     </form>
   );
 }
@@ -135,13 +135,14 @@ function ApprovalRow({ r }: { r: Req }) {
         <p className="text-[13.5px] font-medium text-ink">{r.employeeName}</p>
         <p className="text-[12px] text-ink-soft">{t("lt." + r.type)} · {fmt(r.startDate)}–{fmt(r.endDate)} · {r.days}d{r.reason ? ` · ${r.reason}` : ""}</p>
       </div>
-      <Button size="sm" variant="secondary" onClick={() => decide(false)} disabled={busy}>Decline</Button>
-      <Button size="sm" variant="primary" onClick={() => decide(true)} disabled={busy}>Approve</Button>
+      <Button size="sm" variant="secondary" onClick={() => decide(false)} disabled={busy}>{t("lv.decline")}</Button>
+      <Button size="sm" variant="primary" onClick={() => decide(true)} disabled={busy}>{t("lv.approve")}</Button>
     </div>
   );
 }
 
 function CancelBtn({ id }: { id: string }) {
+  const t = useT();
   const router = useRouter(); const [busy, setBusy] = useState(false);
-  return <button onClick={async () => { setBusy(true); await cancelLeave(id); setBusy(false); router.refresh(); }} disabled={busy} className="text-[12px] text-ink-faint hover:text-bad">Cancel</button>;
+  return <button onClick={async () => { setBusy(true); await cancelLeave(id); setBusy(false); router.refresh(); }} disabled={busy} className="text-[12px] text-ink-faint hover:text-bad">{t("common.cancel")}</button>;
 }

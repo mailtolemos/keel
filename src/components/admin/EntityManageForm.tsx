@@ -4,9 +4,11 @@ import { useRouter } from "next/navigation";
 import { Card, Input, Label, Button, Select } from "@/components/ui";
 import { updateEntity } from "@/app/actions/admin";
 import { APP_DOMAIN } from "@/lib/constants";
+import { useT } from "@/i18n/I18nProvider";
 
 export function EntityManageForm({ id, initial }: { id: string; initial: { name: string; slug: string; status: string; country: string } }) {
   const router = useRouter();
+  const t = useT();
   const [f, setF] = useState(initial);
   const [busy, setBusy] = useState(false); const [saved, setSaved] = useState(false); const [error, setError] = useState("");
   const set = (k: string, v: string) => setF((s) => ({ ...s, [k]: v }));
@@ -21,9 +23,9 @@ export function EntityManageForm({ id, initial }: { id: string; initial: { name:
     <Card className="p-5 max-w-xl">
       <h2 className="text-sm font-semibold text-ink mb-4">Entity settings</h2>
       <div className="space-y-4">
-        <div><Label>Company name</Label><Input value={f.name} onChange={(e) => set("name", e.target.value)} /></div>
+        <div><Label>{t("ad.company")}</Label><Input value={f.name} onChange={(e) => set("name", e.target.value)} /></div>
         <div>
-          <Label>Workspace address</Label>
+          <Label>{t("ad.wsAddress")}</Label>
           <div className="flex items-center gap-1 rounded-lg border border-line bg-surface-2 px-3 h-9 text-sm">
             <span className="text-ink-soft">{APP_DOMAIN}/</span>
             <input value={f.slug} onChange={(e) => set("slug", e.target.value)} className="flex-1 bg-transparent focus:outline-none text-ink font-medium" />
@@ -31,12 +33,12 @@ export function EntityManageForm({ id, initial }: { id: string; initial: { name:
           <p className="mt-1 text-[12px] text-ink-soft">Changing this changes the company's URL.</p>
         </div>
         <div className="grid grid-cols-2 gap-3">
-          <div><Label>Country</Label><Input value={f.country} onChange={(e) => set("country", e.target.value)} /></div>
-          <div><Label>Status</Label><Select value={f.status} onChange={(e) => set("status", e.target.value)}><option value="active">Active</option><option value="suspended">Suspended</option><option value="trial">Trial</option></Select></div>
+          <div><Label>{t("set.country")}</Label><Input value={f.country} onChange={(e) => set("country", e.target.value)} /></div>
+          <div><Label>{t("common.status")}</Label><Select value={f.status} onChange={(e) => set("status", e.target.value)}><option value="active">Active</option><option value="suspended">Suspended</option><option value="trial">Trial</option></Select></div>
         </div>
       </div>
       {error && <p className="mt-3 text-[13px] text-bad">{error}</p>}
-      <div className="mt-5 flex items-center gap-3"><Button onClick={save} disabled={busy}>{busy ? "Saving…" : "Save changes"}</Button>{saved && <span className="text-[13px] text-good">Saved</span>}</div>
+      <div className="mt-5 flex items-center gap-3"><Button onClick={save} disabled={busy}>{busy ? t("common.saving") : t("common.save")}</Button>{saved && <span className="text-[13px] text-good">{t("common.saved")}</span>}</div>
     </Card>
   );
 }

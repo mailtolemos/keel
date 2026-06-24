@@ -43,3 +43,15 @@ If you ever recreate the database, run `npx prisma db push` (or `npm run setup`)
 - **Password reset:** "Forgot password?" on login → `/forgot` → emailed link → `/reset`.
 - **Stripe billing:** Settings → Billing (subscribe / manage via Stripe Checkout + Customer Portal), 14-day trials on new companies, and a paywall when a trial ends or a subscription lapses.
 - All three **degrade gracefully** if their keys aren't set, so the app always builds and runs.
+
+## 5 · Google sign-in
+The "Continue with Google" button on login/signup is already wired — it activates
+once you provide OAuth credentials:
+1. Google Cloud Console → **APIs & Services → Credentials → Create OAuth client ID** (type: Web application).
+2. **Authorized redirect URI:** `https://www.mykeel.org/api/auth/callback/google`
+   (add `http://localhost:3000/api/auth/callback/google` too for local dev).
+3. Configure the OAuth consent screen (External, add your domain).
+4. Add to Vercel env (all environments):
+   - `GOOGLE_CLIENT_ID` = `...apps.googleusercontent.com`
+   - `GOOGLE_CLIENT_SECRET` = `...`
+5. Redeploy. Google sign-in is now live. (First-time Google users land in onboarding to create a workspace.)

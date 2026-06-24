@@ -2,7 +2,8 @@
 import { useState } from "react";
 import { PageHeader } from "@/components/PageHeader";
 import { Card, Badge, cn } from "@/components/ui";
-import { useT } from "@/i18n/I18nProvider";
+import { useT, useLocale } from "@/i18n/I18nProvider";
+import { INTL_LOCALE } from "@/i18n/config";
 import { Icon } from "@/components/icons";
 
 type Ev = { date: string; title: string; type: "holiday" | "leave" | "oneonone" };
@@ -12,6 +13,8 @@ export function CalendarView({ events }: { events: Ev[] }) {
   const today = new Date();
   const [cursor, setCursor] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
   const t = useT();
+  const { locale } = useLocale();
+  const il = INTL_LOCALE[locale];
   const year = cursor.getFullYear(), month = cursor.getMonth();
   const firstDay = new Date(year, month, 1).getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -19,7 +22,7 @@ export function CalendarView({ events }: { events: Ev[] }) {
   while (cells.length % 7 !== 0) cells.push(null);
 
   const evFor = (day: number) => events.filter((e) => { const d = new Date(e.date); return d.getFullYear() === year && d.getMonth() === month && d.getDate() === day; });
-  const monthName = cursor.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+  const monthName = cursor.toLocaleDateString(il, { month: "long", year: "numeric" });
 
   return (
     <div>
@@ -34,7 +37,7 @@ export function CalendarView({ events }: { events: Ev[] }) {
           </div>
         </div>
         <div className="grid grid-cols-7 gap-px bg-surface-3 rounded-lg overflow-hidden border border-line">
-          {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => <div key={d} className="bg-surface-2 py-2 text-center text-[11px] font-medium text-ink-soft">{d}</div>)}
+          {Array.from({ length: 7 }, (_, i) => new Date(2023, 0, i + 1).toLocaleDateString(il, { weekday: "short" })).map((d, i) => <div key={i} className="bg-surface-2 py-2 text-center text-[11px] font-medium text-ink-soft">{d}</div>)}
           {cells.map((day, i) => {
             const isToday = day && year === today.getFullYear() && month === today.getMonth() && day === today.getDate();
             const evs = day ? evFor(day) : [];
